@@ -1,13 +1,13 @@
-package ait.cohort34.smartyflip1_0;
+package ait.cohort34.smartyflip;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SmartyFlip10ApplicationTests {
+class SmartyFlipApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
