@@ -45,16 +45,18 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto editCard(NewCardDto newCardDto) {
-        Card card = cardRepository.findById(newCardDto.getCardId()).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
-        card.setQuestion(newCardDto.getQuestion());
-        card.setAnswer(newCardDto.getAnswer());
-        card.setLevel(newCardDto.getLevel());
-        card.setModuleId(newCardDto.getModuleId());
-        card.setLastUpdate(LocalDateTime.now());
-        card.setLikes(0);
-        card.setBookmark(false);
-        cardRepository.save(card);
-        return modelMapper.map(card, CardDto.class);
+        // FIXME
+//        Card card = cardRepository.findById(newCardDto.getCardId()).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
+//        card.setQuestion(newCardDto.getQuestion());
+//        card.setAnswer(newCardDto.getAnswer());
+//        card.setLevel(newCardDto.getLevel());
+//        card.setModuleId(newCardDto.getModuleId());
+//        card.setLastUpdate(LocalDateTime.now());
+//        card.setLikes(0);
+//        card.setBookmark(false);
+//        cardRepository.save(card);
+//        return modelMapper.map(card, CardDto.class);
+        return null;
     }
 
     @Override
