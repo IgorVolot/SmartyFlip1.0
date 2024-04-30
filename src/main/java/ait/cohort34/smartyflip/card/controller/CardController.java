@@ -1,3 +1,9 @@
+/*
+ *   *******************************************************************
+ *   *  Copyright (c) Author: Igor Volotovskyi ("Copyright "2024")2024.
+ *   *******************************************************************
+ */
+
 package ait.cohort34.smartyflip.card.controller;
 
 import ait.cohort34.smartyflip.card.dto.CardDto;
@@ -11,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class CardController {
-    final CardService cardService;
+    private final CardService cardService;
 
     @PostMapping("/card")
     public CardDto addCard(@RequestBody NewCardDto newCardDto) {
@@ -25,7 +31,7 @@ public class CardController {
 
     @PutMapping("/card/{cardId}")
     public CardDto editCard(@PathVariable Long cardId, @RequestBody NewCardDto newCardDto) {
-        return cardService.editCard(newCardDto);
+        return cardService.editCard(cardId, newCardDto);
     }
 
     @PutMapping("/card/{cardId}/like")
@@ -34,10 +40,9 @@ public class CardController {
         cardService.addLike(cardId);
     }
 
-    @PatchMapping("/card/{cardId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void editBookmark(@PathVariable Long cardId, @PathVariable boolean bookmark) {
-        cardService.editBookmark(cardId, bookmark);
+    @PutMapping("/card/{cardId}/bookmark/{bookmark}")
+    public CardDto editBookmark(@PathVariable Long cardId, @PathVariable boolean bookmark, @RequestBody CardDto cardDto) {
+        return cardService.editBookmark(cardId, bookmark, cardDto);
     }
 
     @DeleteMapping("/card/{cardId}")

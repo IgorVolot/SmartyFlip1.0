@@ -1,3 +1,11 @@
+/*
+ *
+ *  *   *******************************************************************
+ *  *   *  Copyright (c) Author: Igor Volotovskyi ("Copyright "2024")2024.
+ *  *   *******************************************************************
+ *
+ */
+
 package ait.cohort34.smartyflip.card.service;
 
 import ait.cohort34.smartyflip.card.dto.CardDto;
@@ -7,7 +15,7 @@ public interface CardService {
     CardDto addCard(NewCardDto newCardDto);
     CardDto findCardById(Long cardId);
     void addLike (Long cardId);
-    CardDto editCard(NewCardDto newCardDto);
-    void editBookmark(Long cardId, boolean bookmark);
+    CardDto editCard(Long cardId, NewCardDto newCardDto);
+    CardDto editBookmark(Long cardId, boolean bookmark, CardDto cardDto);
     CardDto deleteCard(Long cardId);
 }

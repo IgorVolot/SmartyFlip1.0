@@ -1,3 +1,11 @@
+/*
+ *
+ *  *   *******************************************************************
+ *  *   *  Copyright (c) Author: Igor Volotovskyi ("Copyright "2024")2024.
+ *  *   *******************************************************************
+ *
+ */
+
 package ait.cohort34.smartyflip.configuration;
 
 import org.modelmapper.ModelMapper;
@@ -5,12 +13,8 @@ import org.modelmapper.config.Configuration.AccessLevel;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@EnableAspectJAutoProxy
 public class ServiceConfiguration {
     @Bean
     ModelMapper getModelMapper() {
@@ -20,10 +24,5 @@ public class ServiceConfiguration {
                 .setFieldAccessLevel(AccessLevel.PRIVATE)
                 .setMatchingStrategy(MatchingStrategies.STRICT);
         return modelMapper;
-    }
-
-    @Bean
-    PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
