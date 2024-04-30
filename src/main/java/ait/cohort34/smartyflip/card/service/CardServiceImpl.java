@@ -23,12 +23,14 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
-    @NonNull final CardRepository cardRepository;
-    @NonNull final ModelMapper modelMapper;
+    @NonNull
+    final CardRepository cardRepository;
+    @NonNull
+    final ModelMapper modelMapper;
 
     @Override
     public CardDto addCard(NewCardDto newCardDto) {
-        if (newCardDto == null) {
+        if ( newCardDto == null ) {
             throw new IllegalArgumentException("NewCardDto cannot be null");
         }
         Card card = modelMapper.map(newCardDto, Card.class);
@@ -48,7 +50,7 @@ public class CardServiceImpl implements CardService {
         Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
 
         Integer currentLikes = card.getLikes();
-        if (currentLikes == null) {
+        if ( currentLikes == null ) {
             card.setLikes(1); // The case when the likes is null, setting it to first like
         } else {
             card.setLikes(currentLikes + 1); // Otherwise incrementing the likes
@@ -60,7 +62,7 @@ public class CardServiceImpl implements CardService {
     public CardDto editCard(Long cardId, NewCardDto newCardDto) {
         Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
         String question = newCardDto.getQuestion();
-        if (question != null) {
+        if ( question != null ) {
             card.setQuestion(newCardDto.getQuestion());
         }
         String answer = newCardDto.getAnswer();
@@ -72,7 +74,7 @@ public class CardServiceImpl implements CardService {
             card.setLevel(newCardDto.getLevel());
         }
         Long moduleId = newCardDto.getModuleId();
-        if (moduleId != null) {
+        if ( moduleId != null ) {
             card.setModuleId(newCardDto.getModuleId());
         }
         Integer currentLikes = card.getLikes();
@@ -90,10 +92,10 @@ public class CardServiceImpl implements CardService {
     public CardDto editBookmark(Long cardId, boolean bookmark, CardDto cardDto) {
         Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
 
-        if ( !cardDto.isBookmark() ){
+        if ( !cardDto.isBookmark() ) {
             card.setBookmark(false);
         }
-        if ( cardDto.isBookmark()){
+        if ( cardDto.isBookmark() ) {
             card.setBookmark(true);
         }
         cardRepository.save(card);

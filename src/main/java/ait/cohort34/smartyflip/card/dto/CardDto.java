@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Setter
 public class CardDto {
+
     @Id
     Long cardId;
     String question;

@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "card")
 public class Card {
+
     @Id
     Long cardId;
     String question;

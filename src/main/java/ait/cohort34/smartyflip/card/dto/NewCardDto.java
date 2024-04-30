@@ -14,6 +14,7 @@ import lombok.Getter;
 
 @Getter
 public class NewCardDto {
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long cardId;
     private String question;
