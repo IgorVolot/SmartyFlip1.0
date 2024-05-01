@@ -12,8 +12,11 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 
+/**
+ * A simple data transfer object representing a date period.
+ */
 @Getter
 public class DatePeriodDto {
-    private LocalDate dateFrom;
-    private LocalDate dateTo;
+    LocalDate dateFrom;
+    LocalDate dateTo;
 }

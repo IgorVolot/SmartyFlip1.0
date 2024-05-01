@@ -20,33 +20,58 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+/**
+ * Implementation of the CardService interface that provides methods to add, find, edit, delete, and perform operations on cards.
+ */
 @Service
 @RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
+    /**
+     * Represents a repository for the Card entity.
+     * The repository extends the JpaRepository interface for performing CRUD operations.
+     */
     @NonNull
     final CardRepository cardRepository;
+    /**
+     * The model mapper used for mapping between different object types.
+     */
     @NonNull
     final ModelMapper modelMapper;
 
+    /**
+     * Adds a new card to the system.
+     *
+     * @param newCardDto The object representing the new card to be added.
+     * @return The created card DTO.
+     */
     @Override
     public CardDto addCard(NewCardDto newCardDto) {
-        if ( newCardDto == null ) {
-            throw new IllegalArgumentException("NewCardDto cannot be null");
-        }
         Card card = modelMapper.map(newCardDto, Card.class);
+        card.setLastUpdate(LocalDateTime.now());
         cardRepository.save(card);
-        return modelMapper.map(card, CardDto.class);
+        return mapToDto(card);
     }
 
+    /**
+     * Finds a card by its ID.
+     *
+     * @param cardId The ID of the card to be found.
+     * @return The card DTO corresponding to the ID.
+     */
     @Override
-    public CardDto findCardById(Long cardId) {
-        return cardRepository.findById(cardId)
-                .map(card -> modelMapper.map(card, CardDto.class))
-                .orElse(null);
+    public CardDto findCardById(Integer cardId) {
+        return mapToDto(getCardById(cardId));
     }
 
+    /**
+     * Adds a like to a card identified by the given ID. If the card is not found, a CardNotFoundException is thrown.
+     * If the card already has likes, the number of likes is incremented. Otherwise, the likes are set to 1.
+     *
+     * @param cardId The ID of the card to add a like to.
+     * @throws CardNotFoundException If the card with the given ID is not found.
+     */
     @Override
-    public void addLike(Long cardId) {
+    public void addLike(Integer cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
 
         Integer currentLikes = card.getLikes();
@@ -58,8 +83,16 @@ public class CardServiceImpl implements CardService {
         cardRepository.save(card);
     }
 
+    /**
+     * Edits a card with the given cardId using the provided newCardDto.
+     *
+     * @param cardId     The ID of the card to be edited.
+     * @param newCardDto The object representing the new card details.
+     * @return The edited card DTO.
+     * @throws CardNotFoundException If the card with the given cardId is not found.
+     */
     @Override
-    public CardDto editCard(Long cardId, NewCardDto newCardDto) {
+    public CardDto editCard(Integer cardId, NewCardDto newCardDto) {
         Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
         String question = newCardDto.getQuestion();
         if ( question != null ) {
@@ -73,7 +106,7 @@ public class CardServiceImpl implements CardService {
         if ( level != null ) {
             card.setLevel(newCardDto.getLevel());
         }
-        Long moduleId = newCardDto.getModuleId();
+        Integer moduleId = newCardDto.getModuleId();
         if ( moduleId != null ) {
             card.setModuleId(newCardDto.getModuleId());
         }
@@ -88,8 +121,21 @@ public class CardServiceImpl implements CardService {
     }
 
 
+    /**
+     * Edits the bookmark status of a card with the given cardId. If the card is found,
+     * the bookmark status is updated based on the provided boolean value. If the bookmark
+     * value provided is true, the card is bookmarked. If the bookmark value provided is false,
+     * the card is unbookmarked. The edited card is saved in the repository and the updated
+     * card DTO is returned.
+     *
+     * @param cardId     The ID of the card to be edited.
+     * @param bookmark   The new bookmark status of the card.
+     * @param cardDto    The card DTO representing the updated card details.
+     * @return The edited card DTO.
+     * @throws CardNotFoundException If the card with the given cardId is not found.
+     */
     @Override
-    public CardDto editBookmark(Long cardId, boolean bookmark, CardDto cardDto) {
+    public CardDto editBookmark(Integer cardId, boolean bookmark, CardDto cardDto) {
         Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
 
         if ( !cardDto.isBookmark() ) {
@@ -102,11 +148,38 @@ public class CardServiceImpl implements CardService {
         return modelMapper.map(card, CardDto.class);
     }
 
+    /**
+     * Deletes a card with the given cardId from the repository.
+     *
+     * @param cardId The ID of the card to be deleted.
+     * @return The DTO of the deleted card.
+     * @throws CardNotFoundException If the card with the given cardId is not found.
+     */
     @Override
-    public CardDto deleteCard(Long cardId) {
+    public CardDto deleteCard(Integer cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
         cardRepository.deleteById(cardId);
         return modelMapper.map(card, CardDto.class);
     }
 
+    /**
+     * Retrieves a card from the repository based on the given card ID.
+     *
+     * @param cardId The ID of the card to retrieve.
+     * @return The retrieved card.
+     * @throws CardNotFoundException If the card with the specified ID is not found.
+     */
+    private Card getCardById(Integer cardId) {
+        return cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
+    }
+
+    /**
+     * Maps a Card object to a CardDto object using ModelMapper.
+     *
+     * @param card The Card object to be mapped.
+     * @return The mapped CardDto object.
+     */
+    private CardDto mapToDto(Card card) {
+        return modelMapper.map(card, CardDto.class);
+    }
 }
