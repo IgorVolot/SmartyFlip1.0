@@ -39,13 +39,18 @@ public class CardServiceImpl implements CardService {
     final ModelMapper modelMapper;
 
     /**
-     * Adds a new card to the system.
+     * Adds a new card to the repository using the provided newCardDto.
+     * The new card is saved in the repository and the card DTO is returned.
      *
-     * @param newCardDto The object representing the new card to be added.
+     * @param newCardDto The object representing the new card details.
      * @return The created card DTO.
      */
     @Override
     public CardDto addCard(NewCardDto newCardDto) {
+        validateLength(newCardDto.getQuestion(), "Question");
+        validateLength(newCardDto.getAnswer(), "Answer");
+        validateLength(newCardDto.getLevel(), "Level");
+
         Card card = modelMapper.map(newCardDto, Card.class);
         card.setLastUpdate(LocalDateTime.now());
         cardRepository.save(card);
@@ -181,5 +186,19 @@ public class CardServiceImpl implements CardService {
      */
     private CardDto mapToDto(Card card) {
         return modelMapper.map(card, CardDto.class);
+    }
+
+    /**
+     * Validates the length of a string.
+     * If the string exceeds the maximum length of 255 characters, an IllegalArgumentException is thrown.
+     *
+     * @param str        The string to be validated.
+     * @param fieldName  The name of the field being validated.
+     * @throws IllegalArgumentException If the string exceeds the maximum length.
+     */
+    private void validateLength(String str, String fieldName) {
+        if (str != null && str.length() > 255) {
+            throw new IllegalArgumentException(fieldName + " exceeds the maximum length");
+        }
     }
 }
