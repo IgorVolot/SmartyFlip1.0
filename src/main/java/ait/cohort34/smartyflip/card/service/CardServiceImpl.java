@@ -39,10 +39,9 @@ public class CardServiceImpl implements CardService {
     final ModelMapper modelMapper;
 
     /**
-     * Adds a new card to the repository using the provided newCardDto.
-     * The new card is saved in the repository and the card DTO is returned.
+     * Adds a new card to the system.
      *
-     * @param newCardDto The object representing the new card details.
+     * @param newCardDto The object representing the new card to be added.
      * @return The created card DTO.
      */
     @Override
@@ -53,6 +52,7 @@ public class CardServiceImpl implements CardService {
 
         Card card = modelMapper.map(newCardDto, Card.class);
         card.setLastUpdate(LocalDateTime.now());
+        card.setLikes(0);
         cardRepository.save(card);
         return mapToDto(card);
     }
@@ -68,23 +68,20 @@ public class CardServiceImpl implements CardService {
         return mapToDto(getCardById(cardId));
     }
 
+
     /**
-     * Adds a like to a card identified by the given ID. If the card is not found, a CardNotFoundException is thrown.
-     * If the card already has likes, the number of likes is incremented. Otherwise, the likes are set to 1.
+     * Adds a like to a card identified by the given cardId.
+     * If the card with the provided cardId is not found, a CardNotFoundException is thrown.
      *
      * @param cardId The ID of the card to add a like to.
-     * @throws CardNotFoundException If the card with the given ID is not found.
+     * @throws CardNotFoundException If the card with the given cardId is not found.
      */
     @Override
     public void addLike(Integer cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
 
         Integer currentLikes = card.getLikes();
-        if ( currentLikes == null ) {
-            card.setLikes(1); // The case when the likes is null, setting it to first like
-        } else {
-            card.setLikes(currentLikes + 1); // Otherwise incrementing the likes
-        }
+        card.setLikes(currentLikes + 1);
         cardRepository.save(card);
     }
 
@@ -115,10 +112,7 @@ public class CardServiceImpl implements CardService {
         if ( moduleId != null ) {
             card.setModuleId(newCardDto.getModuleId());
         }
-        Integer currentLikes = card.getLikes();
-        if ( currentLikes != null ) {
-            card.setLikes(0);
-        }
+        card.setLikes(0);
         LocalDateTime now = LocalDateTime.now();
         card.setLastUpdate(now);
         cardRepository.save(card);
@@ -133,9 +127,9 @@ public class CardServiceImpl implements CardService {
      * the card is unbookmarked. The edited card is saved in the repository and the updated
      * card DTO is returned.
      *
-     * @param cardId     The ID of the card to be edited.
-     * @param bookmark   The new bookmark status of the card.
-     * @param cardDto    The card DTO representing the updated card details.
+     * @param cardId   The ID of the card to be edited.
+     * @param bookmark The new bookmark status of the card.
+     * @param cardDto  The card DTO representing the updated card details.
      * @return The edited card DTO.
      * @throws CardNotFoundException If the card with the given cardId is not found.
      */
@@ -190,14 +184,14 @@ public class CardServiceImpl implements CardService {
 
     /**
      * Validates the length of a string.
-     * If the string exceeds the maximum length of 255 characters, an IllegalArgumentException is thrown.
+     * If the string is not null and its length is greater than 1500 characters, an IllegalArgumentException is thrown.
      *
-     * @param str        The string to be validated.
-     * @param fieldName  The name of the field being validated.
-     * @throws IllegalArgumentException If the string exceeds the maximum length.
+     * @param str       The string to be validated.
+     * @param fieldName The name of the field associated with the string.
+     * @throws IllegalArgumentException If the string length exceeds the maximum length.
      */
     private void validateLength(String str, String fieldName) {
-        if (str != null && str.length() > 255) {
+        if ( str != null && str.length() > 1500 ) {
             throw new IllegalArgumentException(fieldName + " exceeds the maximum length");
         }
     }

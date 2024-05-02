@@ -21,12 +21,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * This class represents the unit tests for the CardServiceImpl class.
+ */
 public class CardServiceImplTest {
 
     /**
@@ -177,69 +179,46 @@ public class CardServiceImplTest {
     }
 
     /**
-     * Adds a like to a card identified by the given ID. If the card is not found, a CardNotFoundException is thrown.
-     * If the card already has likes, the number of likes is incremented. Otherwise, the likes are set to 1.
-     *
-     * @throws CardNotFoundException If the card with the given ID is not found.
-     */
-    @Test
-    void testAddLikeFirstTime() {
-        // Arrange
-        Integer cardId = 1;
-        Card card = new Card();
-
-        when(cardRepository.findById(cardId)).thenReturn(Optional.of(card));
-
-        // Act
-        cardService.addLike(cardId);
-
-        // Assert
-        verify(cardRepository, times(1)).findById(cardId);
-
-        assertEquals(1, card.getLikes());
-        verify(cardRepository, times(1)).save(card);
-    }
-
-    /**
-     * Adds a like to a card identified by the given ID. If the card is not found, a CardNotFoundException is thrown.
-     * If the card already has likes, the number of likes is incremented. Otherwise, the likes are set to 1.
-     *
-     * @throws CardNotFoundException If the card with the given ID is not found.
-     */
-    @Test
-    void testAddLikeIncrement() {
-        // Arrange
-        Integer cardId = 1;
-        Card card = new Card();
-        card.setLikes(1);
-
-        when(cardRepository.findById(cardId)).thenReturn(Optional.of(card));
-
-        // Act
-        cardService.addLike(cardId);
-
-        // Assert
-        verify(cardRepository, times(1)).findById(cardId);
-
-        assertEquals(2, card.getLikes());
-        verify(cardRepository, times(1)).save(card);
-    }
-
-    /**
-     * This method tests the functionality of the addLike method in the CardService class when the card is not present.
+     * Test method for {@link CardServiceImpl#addLike(Integer)} when the card is present.
+     * This method tests the functionality of adding a like to a card when the card is present in the repository.
      * <p>
-     * It performs the following steps:
-     * 1. Arrange: Set up necessary objects and dependencies for the test.
-     * - Create an Integer object 'cardId' and initialize it with the card ID.
-     * - Mock the behavior of cardRepository.findById(cardId) method to return an empty Optional.
-     * 2. Act & Assert: Verify that the CardNotFoundException is thrown when calling cardService.addLike(cardId).
-     * - Use assertThrows method to assert the exception is thrown.
-     * 3. Verify: Verify that the cardRepository.findById(cardId) method is called exactly once.
-     *
-     * @throws CardNotFoundException If the card with the given ID is not found.
+     * The method performs the following steps in order:
+     * - Arrange necessary objects and dependencies for the test.
+     * - Mocks the method calls for the given objects.
+     * - Act on the CardService instance.
+     * - Asserts the expected outcomes and verifies interactions.
+     * </p>
      */
     @Test
-    void testAddLikeCardNotPresent() {
+    void testAddLike_CardPresent() {
+        // Arrange
+        Integer cardId = 1;
+        Card card = new Card();
+        card.setLikes(0);
+
+        when(cardRepository.findById(cardId)).thenReturn(Optional.of(card));
+
+        // Act
+        cardService.addLike(cardId);
+
+        // Assert
+        verify(cardRepository, times(1)).findById(cardId);
+        verify(cardRepository, times(1)).save(card);
+        assertEquals(1, card.getLikes());
+    }
+
+    /**
+     * Test method for {@link CardServiceImpl#addLike(Integer)} when the card is not present.
+     * This method tests the behavior of the addLike operation when the card does not exist in the repository.
+     * <p>
+     * The test performs the following steps in order:
+     * - Arrange necessary objects and dependencies.
+     * - Acts on the CardService instance and assert that CardNotFoundException is thrown.
+     * - Verify the interactions with the mock dependencies.
+     * </p>
+     */
+    @Test
+    void testAddLike_CardNotPresent() {
         // Arrange
         Integer cardId = 1;
 

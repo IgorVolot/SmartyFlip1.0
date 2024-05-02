@@ -18,6 +18,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SmartyFlipApplication {
 
+    /**
+     * The main method is the entry point for the SmartyFlip application. It runs the SpringApplication by calling
+     * the SpringApplication.run() method.
+     *
+     * @param args the command-line arguments passed to the application
+     */
     public static void main(String[] args) {
         SpringApplication.run(SmartyFlipApplication.class, args);
     }

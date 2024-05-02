@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/cards")
 public class CardController {
 
     /**
      * This variable represents an instance of the CardService interface.
      * It is used to perform operations related to the Card entity, such as adding, retrieving, editing, and deleting cards.
-     *
+     * <p>
      * Example usage:
-     *
+     * <p>
      * // Adding a new card
      * NewCardDto newCardDto = new NewCardDto();
      * newCardDto.setQuestion("What is the capital of France?");
@@ -36,11 +36,11 @@ public class CardController {
      * newCardDto.setModuleId(1);
      * newCardDto.setStackName("Geography");
      * CardDto createdCard = cardService.addCard(newCardDto);
-     *
+     * <p>
      * // Retrieving a card by its ID
      * Integer cardId = 1;
      * CardDto retrievedCard = cardService.findCardById(cardId);
-     *
+     * <p>
      * // Editing a card
      * Integer cardId = 1;
      * NewCardDto updatedCardDto = new NewCardDto();
@@ -48,17 +48,17 @@ public class CardController {
      * updatedCardDto.setAnswer("Berlin");
      * updatedCardDto.setLevel("Intermediate");
      * CardDto updatedCard = cardService.editCard(cardId, updatedCardDto);
-     *
+     * <p>
      * // Adding a like to a card
      * Integer cardId = 1;
      * cardService.addLike(cardId);
-     *
+     * <p>
      * // Editing the bookmark status of a card
      * Integer cardId = 1;
      * boolean bookmark = true;
      * CardDto cardDto = new CardDto();
      * CardDto updatedCard = cardService.editBookmark(cardId, bookmark, cardDto);
-     *
+     * <p>
      * // Deleting a card
      * Integer cardId = 1;
      * CardDto deletedCard = cardService.deleteCard(cardId);
@@ -71,7 +71,7 @@ public class CardController {
      * @param newCardDto the NewCardDto object containing the data for the new card
      * @return the created CardDto object representing the added card
      */
-    @PostMapping("/card")
+    @PostMapping("")
     public CardDto addCard(@RequestBody NewCardDto newCardDto) {
         return cardService.addCard(newCardDto);
     }
@@ -82,7 +82,7 @@ public class CardController {
      * @param cardId the ID of the card to retrieve
      * @return the CardDto object representing the retrieved card
      */
-    @GetMapping("/card/{cardId}")
+    @GetMapping("/{cardId}")
     public CardDto findCardById(@PathVariable Integer cardId) {
         return cardService.findCardById(cardId);
     }
@@ -94,7 +94,7 @@ public class CardController {
      * @param newCardDto the NewCardDto object containing the updated data for the card
      * @return the updated CardDto object representing the edited card
      */
-    @PutMapping("/card/{cardId}")
+    @PutMapping("/{cardId}")
     public CardDto editCard(@PathVariable Integer cardId, @RequestBody NewCardDto newCardDto) {
         return cardService.editCard(cardId, newCardDto);
     }
@@ -104,7 +104,7 @@ public class CardController {
      *
      * @param cardId the ID of the card to add a like to
      */
-    @PutMapping("/card/{cardId}/like")
+    @PutMapping("/{cardId}/like")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addLike(@PathVariable Integer cardId) {
         cardService.addLike(cardId);
@@ -118,7 +118,7 @@ public class CardController {
      * @param cardDto   the CardDto object containing the updated data for the card
      * @return the updated CardDto object representing the edited card
      */
-    @PutMapping("/card/{cardId}/bookmark/{bookmark}")
+    @PutMapping("/{cardId}/bookmark/{bookmark}")
     public CardDto editBookmark(@PathVariable Integer cardId, @PathVariable boolean bookmark, @RequestBody CardDto cardDto) {
         return cardService.editBookmark(cardId, bookmark, cardDto);
     }
@@ -129,7 +129,7 @@ public class CardController {
      * @param cardId the ID of the card to be deleted
      * @return the CardDto object representing the deleted card
      */
-    @DeleteMapping("/card/{cardId}")
+    @DeleteMapping("/{cardId}")
     public CardDto deleteCard(@PathVariable Integer cardId) {
         return cardService.deleteCard(cardId);
     }
