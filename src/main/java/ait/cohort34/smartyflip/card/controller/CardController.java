@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/cards")
 public class CardController {
 
     /**
@@ -71,7 +71,7 @@ public class CardController {
      * @param newCardDto the NewCardDto object containing the data for the new card
      * @return the created CardDto object representing the added card
      */
-    @PostMapping("/card")
+    @PostMapping("")
     public CardDto addCard(@RequestBody NewCardDto newCardDto) {
         return cardService.addCard(newCardDto);
     }
@@ -82,7 +82,7 @@ public class CardController {
      * @param cardId the ID of the card to retrieve
      * @return the CardDto object representing the retrieved card
      */
-    @GetMapping("/card/{cardId}")
+    @GetMapping("/{cardId}")
     public CardDto findCardById(@PathVariable Integer cardId) {
         return cardService.findCardById(cardId);
     }
@@ -94,7 +94,7 @@ public class CardController {
      * @param newCardDto the NewCardDto object containing the updated data for the card
      * @return the updated CardDto object representing the edited card
      */
-    @PutMapping("/card/{cardId}")
+    @PutMapping("/{cardId}")
     public CardDto editCard(@PathVariable Integer cardId, @RequestBody NewCardDto newCardDto) {
         return cardService.editCard(cardId, newCardDto);
     }
@@ -104,7 +104,7 @@ public class CardController {
      *
      * @param cardId the ID of the card to add a like to
      */
-    @PutMapping("/card/{cardId}/like")
+    @PutMapping("/{cardId}/like")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addLike(@PathVariable Integer cardId) {
         cardService.addLike(cardId);
@@ -118,7 +118,7 @@ public class CardController {
      * @param cardDto   the CardDto object containing the updated data for the card
      * @return the updated CardDto object representing the edited card
      */
-    @PutMapping("/card/{cardId}/bookmark/{bookmark}")
+    @PutMapping("/{cardId}/bookmark/{bookmark}")
     public CardDto editBookmark(@PathVariable Integer cardId, @PathVariable boolean bookmark, @RequestBody CardDto cardDto) {
         return cardService.editBookmark(cardId, bookmark, cardDto);
     }
@@ -129,7 +129,7 @@ public class CardController {
      * @param cardId the ID of the card to be deleted
      * @return the CardDto object representing the deleted card
      */
-    @DeleteMapping("/card/{cardId}")
+    @DeleteMapping("/{cardId}")
     public CardDto deleteCard(@PathVariable Integer cardId) {
         return cardService.deleteCard(cardId);
     }

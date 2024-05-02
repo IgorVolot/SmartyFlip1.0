@@ -80,7 +80,7 @@ public class CardServiceImpl implements CardService {
 
         Integer currentLikes = card.getLikes();
         if ( currentLikes == null ) {
-            card.setLikes(1); // The case when the likes is null, setting it to first like
+            card.setLikes(1); // The case when the likes are null, setting it to first like
         } else {
             card.setLikes(currentLikes + 1); // Otherwise incrementing the likes
         }
