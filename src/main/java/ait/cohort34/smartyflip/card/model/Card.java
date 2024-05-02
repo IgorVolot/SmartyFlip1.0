@@ -109,4 +109,19 @@ public class Card {
      * The name of the stack that a card belongs to.
      */
     String stackName;
+
+//    public Card(String question, String answer, String level, Integer moduleId, String stackName) {
+//        this();
+//        this.question = question;
+//        this.answer = answer;
+//        this.level = level;
+//        this.moduleId = moduleId;
+//        this.stackName = stackName;
+//    }
+//
+//    public Card() {
+//        this.lastUpdate = LocalDateTime.now();
+//        this.likes = 0;
+//        this.bookmark = false;
+//    }
 }
