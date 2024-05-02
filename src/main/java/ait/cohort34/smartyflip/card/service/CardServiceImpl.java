@@ -46,6 +46,10 @@ public class CardServiceImpl implements CardService {
      */
     @Override
     public CardDto addCard(NewCardDto newCardDto) {
+        validateLength(newCardDto.getQuestion(), "Question");
+        validateLength(newCardDto.getAnswer(), "Answer");
+        validateLength(newCardDto.getLevel(), "Level");
+
         Card card = modelMapper.map(newCardDto, Card.class);
         card.setLastUpdate(LocalDateTime.now());
         cardRepository.save(card);
@@ -181,5 +185,19 @@ public class CardServiceImpl implements CardService {
      */
     private CardDto mapToDto(Card card) {
         return modelMapper.map(card, CardDto.class);
+    }
+
+    /**
+     * Validates the length of a string.
+     * If the string is not null and its length is greater than 1500 characters, an IllegalArgumentException is thrown.
+     *
+     * @param str        The string to be validated.
+     * @param fieldName  The name of the field associated with the string.
+     * @throws IllegalArgumentException If the string length exceeds the maximum length.
+     */
+    private void validateLength(String str, String fieldName) {
+        if (str != null && str.length() > 1500) {
+            throw new IllegalArgumentException(fieldName + " exceeds the maximum length");
+        }
     }
 }

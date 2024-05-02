@@ -46,9 +46,9 @@ public class CardDto {
      *   card.setCardId(1);
      * }</pre>
      *
-     * @see javax.persistence.Id
-     * @see javax.persistence.GeneratedValue
-     * @see javax.persistence.GenerationType
+     * @see Id
+     * @see GeneratedValue
+     * @see GenerationType
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
