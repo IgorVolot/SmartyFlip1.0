@@ -29,10 +29,10 @@ import java.time.LocalDateTime;
 @Setter
 public class CardDto {
     /**
-     * Represents the ID of a modules.
+     * Represents the ID of a decks.
      *
      * <p>
-     * The cardId variable is used to uniquely identify a modules. It is annotated with
+     * The cardId variable is used to uniquely identify a decks. It is annotated with
      * {@code @Id} and {@code @GeneratedValue} to indicate that it is the primary key of the entity.
      * The {@code @GeneratedValue} annotation specifies the strategy for generating the ID values,
      * in this case, it is set to {@code GenerationType.AUTO}.
@@ -42,8 +42,8 @@ public class CardDto {
      * Example usage:
      * </p>
      * <pre>{@code
-     *   CardDto modules = new CardDto();
-     *   modules.setCardId(1);
+     *   CardDto decks = new CardDto();
+     *   decks.setCardId(1);
      * }</pre>
      *
      * @see Id
@@ -63,7 +63,7 @@ public class CardDto {
     String level;
 
 //    /**
-//     * The `likes` variable represents the number of likes a modules has received.
+//     * The `likes` variable represents the number of likes a decks has received.
 //     *
 //     * It is of type `Integer`.
 //     *
@@ -73,35 +73,35 @@ public class CardDto {
 //     *
 //     * Example usage:
 //     * ```java
-//     * CardDto modules = new CardDto();
-//     * modules.setLikes(5);
-//     * Integer likes = modules.getLikes();
+//     * CardDto decks = new CardDto();
+//     * decks.setLikes(5);
+//     * Integer likes = decks.getLikes();
 //     * ```
 //     */
 //    Integer likes;
 //
 //    /**
-//     * Represents a bookmark status for a particular modules.
+//     * Represents a bookmark status for a particular decks.
 //     *
-//     * The bookmark variable is a boolean field that indicates whether a modules has been bookmarked or not.
-//     * A value of true indicates that the modules has been bookmarked, while a value of false indicates that it has not.
+//     * The bookmark variable is a boolean field that indicates whether a decks has been bookmarked or not.
+//     * A value of true indicates that the decks has been bookmarked, while a value of false indicates that it has not.
 //     *
-//     * This field is part of the CardDto class, which represents a Data Transfer Object (DTO) for a modules.
-//     * The CardDto class encapsulates all the necessary data fields for a modules and provides getters and setters for each field.
+//     * This field is part of the CardDto class, which represents a Data Transfer Object (DTO) for a decks.
+//     * The CardDto class encapsulates all the necessary data fields for a decks and provides getters and setters for each field.
 //     *
 //     * Example usage:
 //     *
-//     * CardDto modules = new CardDto();
-//     * modules.setBookmark(true);
-//     * boolean bookmarked = modules.isBookmark();
+//     * CardDto decks = new CardDto();
+//     * decks.setBookmark(true);
+//     * boolean bookmarked = decks.isBookmark();
 //     *
-//     * In this example, a new CardDto object is created and assigned to the modules variable.
-//     * The setBookmark() method is then used to set the bookmark status of the modules to true.
-//     * Finally, the isBookmark() method is used to retrieve the bookmark status of the modules, which is assigned to the bookmarked variable.
+//     * In this example, a new CardDto object is created and assigned to the decks variable.
+//     * The setBookmark() method is then used to set the bookmark status of the decks to true.
+//     * Finally, the isBookmark() method is used to retrieve the bookmark status of the decks, which is assigned to the bookmarked variable.
 //     */
 //    boolean bookmark;
 
-    Integer moduleId;
+    Integer deckId;
 
     String stackName;
 }

@@ -6,7 +6,7 @@
  *
  */
 
-package smartyflip.modules.service.exceptions;
+package smartyflip.decks.service.exceptions;
 
 public class AuthorNotFoundException extends RuntimeException {
 }

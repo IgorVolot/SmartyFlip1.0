@@ -6,7 +6,7 @@
  *
  */
 
-package smartyflip.modules.dto;
+package smartyflip.decks.dto;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,12 +18,12 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Builder
-public class ModuleDto {
+public class DeckDto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer moduleId;
+    private Integer deckId;
 
-    private String moduleName;
+    private String deckName;
 
     private String authorName;
 

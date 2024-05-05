@@ -18,6 +18,6 @@ import java.util.stream.Stream;
  */
 public interface CardRepository extends JpaRepository<Card, Integer> {
 
-    Stream<Card> findAllCardsByModuleId(Integer moduleId);
+    Stream<Card> findAllCardsByDeckId(Integer deckId);
 
 }

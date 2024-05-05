@@ -6,7 +6,7 @@
  *
  */
 
-package smartyflip.modules.service;
+package smartyflip.decks.service;
 
 import smartyflip.cards.dao.CardRepository;
 import smartyflip.cards.dto.CardDto;
@@ -54,13 +54,13 @@ public class CardServiceImplTest {
      * - modelMapper: The model mapper used for mapping between different object types.
      * <p>
      * Class Methods:
-     * - addCard: Adds a new modules to the system.
-     * - findCardById: Finds a modules by its ID.
-     * - addLike: Adds a like to a modules identified by the given ID.
-     * - editCard: Edits a modules with the given cardId using the provided newCardDto.
-     * - editBookmark: Edits the bookmark status of a modules with the given cardId.
-     * - deleteCard: Deletes a modules with the given cardId from the repository.
-     * - getCardById: Retrieves a modules from the repository based on the given modules ID.
+     * - addCard: Adds a new decks to the system.
+     * - findCardById: Finds a decks by its ID.
+     * - addLike: Adds a like to a decks identified by the given ID.
+     * - editCard: Edits a decks with the given cardId using the provided newCardDto.
+     * - editBookmark: Edits the bookmark status of a decks with the given cardId.
+     * - deleteCard: Deletes a decks with the given cardId from the repository.
+     * - getCardById: Retrieves a decks from the repository based on the given decks ID.
      * - mapToDto: Maps a Card object to a CardDto object using ModelMapper.
      */
     @InjectMocks
@@ -155,11 +155,11 @@ public class CardServiceImplTest {
     }
 
     /**
-     * This method tests the functionality of the findCardById method in the CardService class when the modules is not present.
+     * This method tests the functionality of the findCardById method in the CardService class when the decks is not present.
      * <p>
      * It performs the following steps:
      * 1. Arrange: Set up necessary objects and dependencies for the test.
-     * - Create an Integer object 'cardId' and initialize it with the modules ID.
+     * - Create an Integer object 'cardId' and initialize it with the decks ID.
      * - Mock the behavior of cardRepository.findById(cardId) method to return an empty Optional.
      * 2. Act & Assert: Verify that the CardNotFoundException is thrown when calling cardService.findCardById(cardId).
      * - Use assertThrows method to assert the exception is thrown.
@@ -178,8 +178,8 @@ public class CardServiceImplTest {
     }
 
 //    /**
-//     * Test method for {@link CardServiceImpl#addLike(Integer)} when the modules is present.
-//     * This method tests the functionality of adding a like to a modules when the modules is present in the repository.
+//     * Test method for {@link CardServiceImpl#addLike(Integer)} when the decks is present.
+//     * This method tests the functionality of adding a like to a decks when the decks is present in the repository.
 //     * <p>
 //     * The method performs the following steps in order:
 //     * - Arrange necessary objects and dependencies for the test.
@@ -207,8 +207,8 @@ public class CardServiceImplTest {
 //    }
 //
 //    /**
-//     * Test method for {@link CardServiceImpl#addLike(Integer)} when the modules is not present.
-//     * This method tests the behavior of the addLike operation when the modules does not exist in the repository.
+//     * Test method for {@link CardServiceImpl#addLike(Integer)} when the decks is not present.
+//     * This method tests the behavior of the addLike operation when the decks does not exist in the repository.
 //     * <p>
 //     * The test performs the following steps in order:
 //     * - Arrange necessary objects and dependencies.
@@ -230,25 +230,25 @@ public class CardServiceImplTest {
 
     /**
      * This method tests the functionality of the editCard method in the CardService class
-     * when the modules is present. It performs the following steps:
+     * when the decks is present. It performs the following steps:
      * <p>
      * 1. Arrange: Set up the necessary objects and mock dependencies for the test.
-     * - Create an Integer object 'cardId' and initialize it with the modules ID.
+     * - Create an Integer object 'cardId' and initialize it with the decks ID.
      * - Create a NewCardDto object 'newCardDto'.
-     * - Create a Card object 'modules'.
+     * - Create a Card object 'decks'.
      * - Create a CardDto object 'cardDto' and set its cardId to the 'cardId'.
-     * - Mock the behavior of cardRepository.findById(cardId) to return an Optional containing the 'modules'.
-     * - Mock the behavior of modelMapper.map(modules, NewCardDto.class) to return the 'newCardDto'.
-     * - Mock the behavior of cardRepository.save(modules) to return the 'modules'.
-     * - Mock the behavior of modelMapper.map(modules, CardDto.class) to return the 'cardDto'.
+     * - Mock the behavior of cardRepository.findById(cardId) to return an Optional containing the 'decks'.
+     * - Mock the behavior of modelMapper.map(decks, NewCardDto.class) to return the 'newCardDto'.
+     * - Mock the behavior of cardRepository.save(decks) to return the 'decks'.
+     * - Mock the behavior of modelMapper.map(decks, CardDto.class) to return the 'cardDto'.
      * <p>
      * 2. Act: Call the editCard method with the 'cardId' and 'newCardDto'.
      * <p>
      * 3. Assert: Verify that the expected method invocations are made and the result is not null
      * and matches the expected value.
      * - Verify that cardRepository.findById(cardId) is called exactly once.
-     * - Verify that cardRepository.save(modules) is called exactly once.
-     * - Verify that modelMapper.map(modules, CardDto.class) is called exactly once.
+     * - Verify that cardRepository.save(decks) is called exactly once.
+     * - Verify that modelMapper.map(decks, CardDto.class) is called exactly once.
      * - Verify that the result is not null.
      * - Verify that the result is equal to 'cardDto'.
      */
@@ -279,11 +279,11 @@ public class CardServiceImplTest {
     }
 
     /**
-     * This method tests the functionality of the editCard method in the CardService class when the modules is not present.
+     * This method tests the functionality of the editCard method in the CardService class when the decks is not present.
      * <p>
      * It performs the following steps:
      * 1. Arrange: Set up necessary objects and dependencies for the test.
-     * - Create an Integer object 'cardId' and initialize it with the modules ID.
+     * - Create an Integer object 'cardId' and initialize it with the decks ID.
      * - Create a NewCardDto object 'newCardDto'.
      * - Mock the behavior of cardRepository.findById(cardId) method to return an empty Optional.
      * <p>
@@ -306,18 +306,18 @@ public class CardServiceImplTest {
     }
 
 //    /**
-//     * This method tests the editBookmark method of the CardService class when the modules is present and the bookmark value is true.
+//     * This method tests the editBookmark method of the CardService class when the decks is present and the bookmark value is true.
 //     * It performs the following steps:
 //     * 1. Arrange: Create the necessary objects and mock dependencies for the test.
-//     * - Create an Integer object 'cardId' and initialize it with the modules ID.
-//     * - Create a Card object 'modules'.
+//     * - Create an Integer object 'cardId' and initialize it with the decks ID.
+//     * - Create a Card object 'decks'.
 //     * - Create a CardDto object 'cardDto' and set its cardId to 'cardId' and bookmark value to true.
-//     * - Mock the behavior of cardRepository.findById(cardId) to return an Optional containing the 'modules'.
+//     * - Mock the behavior of cardRepository.findById(cardId) to return an Optional containing the 'decks'.
 //     * 2. Act: Call the editBookmark method of cardService with 'cardId', true, and 'cardDto'.
 //     * 3. Assert: Verify that the expected method invocations are made and the result is not null and matches the expected value.
 //     * - Verify that cardRepository.findById(cardId) is called exactly once.
-//     * - Verify that cardRepository.save(modules) is called exactly once.
-//     * - Verify that modelMapper.map(modules, CardDto.class) is called exactly once.
+//     * - Verify that cardRepository.save(decks) is called exactly once.
+//     * - Verify that modelMapper.map(decks, CardDto.class) is called exactly once.
 //     * - Verify that the result is not null.
 //     * - Verify that the result is equal to 'cardDto'.
 //     */
@@ -346,17 +346,17 @@ public class CardServiceImplTest {
 //    }
 //
 //    /**
-//     * Method to test the editBookmark method of the CardService class when a modules is present and bookmark flag is set to false.
+//     * Method to test the editBookmark method of the CardService class when a decks is present and bookmark flag is set to false.
 //     * <p>
 //     * The method performs the following steps:
 //     * 1. Initializes cardId variable with value 1.
 //     * 2. Creates a new Card object.
 //     * 3. Creates a new CardDto object and sets its cardId and bookmark fields based on provided values.
-//     * 4. Mocks the cardRepository.findById method to return Optional.of(modules) when called with cardId.
+//     * 4. Mocks the cardRepository.findById method to return Optional.of(decks) when called with cardId.
 //     * 5. Calls the editBookmark method of cardService, passing cardId, false, and cardDto as parameters.
 //     * 6. Verifies that cardRepository.findById method was called exactly once with cardId.
-//     * 7. Verifies that cardRepository.save method was called exactly once with modules.
-//     * 8. Verifies that modelMapper.map method was called exactly once with modules and CardDto.class.
+//     * 7. Verifies that cardRepository.save method was called exactly once with decks.
+//     * 8. Verifies that modelMapper.map method was called exactly once with decks and CardDto.class.
 //     * 9. Asserts that the result is not null.
 //     * 10. Asserts that the returned result is equal to cardDto.
 //     * 11. Asserts that the returned result's bookmark field is equal to cardDto's bookmark field.
@@ -387,7 +387,7 @@ public class CardServiceImplTest {
 //
 //    /**
 //     * This method tests the behavior of the editBookmark method in the CardService class
-//     * when the specified modules is not present in the database.
+//     * when the specified decks is not present in the database.
 //     * <p>
 //     * It performs the following steps:
 //     * 1. Creates a cardId variable and sets it to 1.
@@ -411,19 +411,19 @@ public class CardServiceImplTest {
 //    }
 
     /**
-     * Test method for {@link CardService#deleteCard(Integer)} when modules is present.
-     * This method tests the functionality of deleting a modules when the modules is present in the database.
+     * Test method for {@link CardService#deleteCard(Integer)} when decks is present.
+     * This method tests the functionality of deleting a decks when the decks is present in the database.
      *
      * <p>
      * The test performs the following steps:
      * <ul>
      *   <li>Arranges the necessary objects and data for the test.</li>
-     *   <li>Mocks the behavior of the {@code cardRepository} to return the specified modules for the given modules ID.</li>
-     *   <li>Invokes the {@code deleteCard} method of the {@code cardService} with the specified modules ID.</li>
-     *   <li>Verifies that the {@code findById} method of the {@code cardRepository} is called exactly once with the specified modules ID.</li>
-     *   <li>Verifies that the {@code deleteById} method of the {@code cardRepository} is called exactly once with the specified modules ID.</li>
+     *   <li>Mocks the behavior of the {@code cardRepository} to return the specified decks for the given decks ID.</li>
+     *   <li>Invokes the {@code deleteCard} method of the {@code cardService} with the specified decks ID.</li>
+     *   <li>Verifies that the {@code findById} method of the {@code cardRepository} is called exactly once with the specified decks ID.</li>
+     *   <li>Verifies that the {@code deleteById} method of the {@code cardRepository} is called exactly once with the specified decks ID.</li>
      *   <li>Asserts that the result of the {@code deleteCard} method is not null.</li>
-     *   <li>Asserts that the result of the {@code deleteCard} method is equal to the expected modules DTO.</li>
+     *   <li>Asserts that the result of the {@code deleteCard} method is equal to the expected decks DTO.</li>
      * </ul>
      * </p>
      */
@@ -450,7 +450,7 @@ public class CardServiceImplTest {
 
     /**
      * Unit test for {@link CardService#deleteCard(Integer)}.
-     * Verifies the behavior when attempting to delete a modules that is not present in the modules repository.
+     * Verifies the behavior when attempting to delete a decks that is not present in the decks repository.
      */
     @Test
     void testDeleteCard_CardNotPresent() {

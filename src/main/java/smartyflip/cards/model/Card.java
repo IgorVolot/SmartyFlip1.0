@@ -39,16 +39,16 @@ public class Card {
     private String level;
 
 //    /**
-//     * This variable represents the number of likes a modules has received.
+//     * This variable represents the number of likes a decks has received.
 //     * It is an instance of the Integer class, which is a wrapper class for the primitive type int.
-//     * The value of this variable can be null, indicating that the modules has not received any likes yet.
+//     * The value of this variable can be null, indicating that the decks has not received any likes yet.
 //     * To access or modify the value of this variable, use the appropriate getters and setters methods provided by the Card class.
 //     *
 //     * Example usage:
 //     *
-//     * Card modules = new Card();
-//     * modules.setLikes(10); // Set the number of likes to 10
-//     * int likes = modules.getLikes(); // Get the number of likes
+//     * Card decks = new Card();
+//     * decks.setLikes(10); // Set the number of likes to 10
+//     * int likes = decks.getLikes(); // Get the number of likes
 //     *
 //     * Note: The Card class is defined in the same package, so you can directly access and modify the likes variable without any additional imports.
 //     */
@@ -56,16 +56,19 @@ public class Card {
 //    private Integer likes;
 //
 //    /**
-//     * The bookmark variable represents whether a modules has been bookmarked or not.
+//     * The bookmark variable represents whether a decks has been bookmarked or not.
 //     *
-//     * If the value of bookmark is true, it means that the modules has been bookmarked.
-//     * If the value of bookmark is false, it means that the modules has not been bookmarked.
+//     * If the value of bookmark is true, it means that the decks has been bookmarked.
+//     * If the value of bookmark is false, it means that the decks has not been bookmarked.
 //     */
 //    @Setter
 //    private boolean bookmark;
 
 //    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer moduleId;
+    Integer deckId;
+
+    @Setter
+    String deckName;
 
     @Setter
     String stackName;

@@ -6,16 +6,16 @@
  *
  */
 
-package smartyflip.modules.dto;
+package smartyflip.decks.dto;
 
 import lombok.Getter;
 
 import java.util.Set;
 
 @Getter
-public class NewModuleDto {
+public class NewDeckDto {
 
-    String moduleName;
+    String deckName;
     String authorName;
     Set<String> tags;
     String stackName;

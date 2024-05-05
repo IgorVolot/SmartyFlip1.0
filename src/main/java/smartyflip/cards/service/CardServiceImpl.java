@@ -58,11 +58,11 @@ public class CardServiceImpl implements CardService {
 
 
 //    /**
-//     * Adds a like to a modules identified by the given cardId.
-//     * If the modules with the provided cardId is not found, a CardNotFoundException is thrown.
+//     * Adds a like to a decks identified by the given cardId.
+//     * If the decks with the provided cardId is not found, a CardNotFoundException is thrown.
 //     *
-//     * @param cardId The ID of the modules to add a like to.
-//     * @throws CardNotFoundException If the modules with the given cardId is not found.
+//     * @param cardId The ID of the decks to add a like to.
+//     * @throws CardNotFoundException If the decks with the given cardId is not found.
 //     */
 //    @Override
 //    public void addLike(Integer cardId) {
@@ -82,17 +82,17 @@ public class CardServiceImpl implements CardService {
 
 
 //    /**
-//     * Edits the bookmark status of a modules with the given cardId. If the modules is found,
+//     * Edits the bookmark status of a decks with the given cardId. If the decks is found,
 //     * the bookmark status is updated based on the provided boolean value. If the bookmark
-//     * value provided is true, the modules is bookmarked. If the bookmark value provided is false,
-//     * the modules is unbookmarked. The edited modules is saved in the repository and the updated
-//     * modules DTO is returned.
+//     * value provided is true, the decks is bookmarked. If the bookmark value provided is false,
+//     * the decks is unbookmarked. The edited decks is saved in the repository and the updated
+//     * decks DTO is returned.
 //     *
-//     * @param cardId   The ID of the modules to be edited.
-//     * @param bookmark The new bookmark status of the modules.
-//     * @param cardDto  The modules DTO representing the updated modules details.
-//     * @return The edited modules DTO.
-//     * @throws CardNotFoundException If the modules with the given cardId is not found.
+//     * @param cardId   The ID of the decks to be edited.
+//     * @param bookmark The new bookmark status of the decks.
+//     * @param cardDto  The decks DTO representing the updated decks details.
+//     * @return The edited decks DTO.
+//     * @throws CardNotFoundException If the decks with the given cardId is not found.
 //     */
 //    @Override
 //    public CardDto editBookmark(Integer cardId, boolean bookmark, CardDto cardDto) {
@@ -119,16 +119,16 @@ public class CardServiceImpl implements CardService {
 
     @Transactional(readOnly = true)
     @Override
-    public Iterable<CardDto> findCardsByModuleId(Integer moduleId) {
-        if ( moduleId == null ) {
+    public Iterable<CardDto> findCardsByDeckId(Integer deckId) {
+        if ( deckId == null ) {
             return Collections.emptyList();
         }
         try {
-            return cardRepository.findAllCardsByModuleId(moduleId)
+            return cardRepository.findAllCardsByDeckId(deckId)
                     .map(this::mapToDto).collect(Collectors.toList());
         } catch (Exception e) {
             //consider logging the error message for debugging
-            throw new RuntimeException("An error occurred while fetching Card Data using Module ID", e);
+            throw new RuntimeException("An error occurred while fetching Card Data using Deck ID", e);
         }
     }
 
@@ -165,14 +165,14 @@ public class CardServiceImpl implements CardService {
             card.setLevel(level);
         }
 
-        String moduleName = newCardDto.getModuleName();
-        if (moduleName != null) {
-            card.setModuleName(moduleName);
+        String deckName = newCardDto.getDeckName();
+        if (deckName != null) {
+            card.setDeckName(deckName);
         }
 
 //        Integer moduleId = newCardDto.getModuleId();
 //        if (moduleId != null) {
-//            modules.setModuleId(moduleId);
+//            decks.setModuleId(moduleId);
 //        }
 //        card.setLikes(0);
         card.setDateCreated(LocalDateTime.now());

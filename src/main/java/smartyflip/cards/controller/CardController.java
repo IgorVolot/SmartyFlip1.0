@@ -12,7 +12,6 @@ import smartyflip.cards.dto.CardDto;
 import smartyflip.cards.dto.NewCardDto;
 import smartyflip.cards.service.CardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -42,9 +41,9 @@ public class CardController {
     }
 
 //    /**
-//     * Adds a like to the specified modules.
+//     * Adds a like to the specified decks.
 //     *
-//     * @param cardId the ID of the modules to add a like to
+//     * @param cardId the ID of the decks to add a like to
 //     */
 //    @PutMapping("/{cardId}/like")
 //    @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -53,12 +52,12 @@ public class CardController {
 //    }
 //
 //    /**
-//     * Edits the bookmark status of a modules.
+//     * Edits the bookmark status of a decks.
 //     *
-//     * @param cardId    the ID of the modules to be edited
-//     * @param bookmark  the new bookmark status for the modules
-//     * @param cardDto   the CardDto object containing the updated data for the modules
-//     * @return the updated CardDto object representing the edited modules
+//     * @param cardId    the ID of the decks to be edited
+//     * @param bookmark  the new bookmark status for the decks
+//     * @param cardDto   the CardDto object containing the updated data for the decks
+//     * @return the updated CardDto object representing the edited decks
 //     */
 //    @PutMapping("/{cardId}/bookmark/{bookmark}")
 //    public CardDto editBookmark(@PathVariable Integer cardId, @PathVariable boolean bookmark, @RequestBody CardDto cardDto) {
@@ -70,9 +69,9 @@ public class CardController {
         return cardService.deleteCard(cardId);
     }
 
-    @GetMapping("/modules/{moduleId}")
-    public Iterable<CardDto> findCardsByModuleId(@PathVariable Integer moduleId) {
-        return cardService.findCardsByModuleId(moduleId);
+    @GetMapping("/modules/{deckId}")
+    public Iterable<CardDto> findCardsByDeckId(@PathVariable Integer deckId) {
+        return cardService.findCardsByDeckId(deckId);
     }
 
 }

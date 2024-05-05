@@ -5,7 +5,7 @@
  *  *   *******************************************************************
  *
  */
-package smartyflip.modules.model;
+package smartyflip.decks.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,15 +17,15 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@EqualsAndHashCode(of = "moduleId")
+@EqualsAndHashCode(of = "deckId")
 @Entity
-@Table(name = "module")
-public class Module {
+@Table(name = "deck")
+public class Deck {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer moduleId;
+    Integer deckId;
     @Setter
-    String moduleName;
+    String deckName;
 
     @Setter
     String authorName;
@@ -43,12 +43,12 @@ public class Module {
     int cardsCount;
 
     @ElementCollection
-    @CollectionTable(name = "tag", joinColumns = @JoinColumn(name = "module_id"))
+    @CollectionTable(name = "tag", joinColumns = @JoinColumn(name = "deck_id"))
     @Column(name = "tag")
     Set<String> tags = new HashSet<>();
 
-    public Module(String moduleName, String authorName, String stackName, Set<String> tags, boolean isPublic) {
-        this.moduleName = moduleName;
+    public Deck(String deckName, String authorName, String stackName, Set<String> tags, boolean isPublic) {
+        this.deckName = deckName;
         this.authorName = authorName;
         this.stackName = stackName;
         this.tags = tags;

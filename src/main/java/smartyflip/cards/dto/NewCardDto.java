@@ -11,8 +11,8 @@ package smartyflip.cards.dto;
 import lombok.Getter;
 
 /**
- * This class represents a Data Transfer Object (DTO) for a new modules.
- * It encapsulates the necessary data fields for a new modules.
+ * This class represents a Data Transfer Object (DTO) for a new decks.
+ * It encapsulates the necessary data fields for a new decks.
  * It provides getters and setters for each data field.
  */
 @Getter
@@ -24,7 +24,8 @@ public class NewCardDto {
 
     String level;
 
-    Integer moduleId;
+    Integer deckId;
+    String deckName;
 
     String stackName;
 
