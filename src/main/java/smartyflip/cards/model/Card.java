@@ -10,6 +10,7 @@ package smartyflip.cards.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import smartyflip.decks.model.Deck;
 
 import java.time.LocalDateTime;
 
@@ -32,8 +33,7 @@ public class Card {
     @Setter
     private String answer;
 
-    @Setter
-    private LocalDateTime dateCreated = LocalDateTime.now();
+    private LocalDateTime dateCreated;
 
     @Setter
     private String level;
@@ -65,34 +65,18 @@ public class Card {
 //    private boolean bookmark;
 
 //    @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer deckId;
+//    private Integer deckId;
 
     @Setter
-    String deckName;
+    private String deckName;
 
     @Setter
-    String stackName;
+    private String stackName;
 
-//    public Card(String question, String answer, String level, Integer moduleId, String stackName) {
-//        this();
-//        this.question = question;
-//        this.answer = answer;
-//        this.level = level;
-//        this.moduleId = moduleId;
-//        this.stackName = stackName;
-//    }
-//
-//    public Card() {
-//        this.lastUpdate = LocalDateTime.now();
-//        this.likes = 0;
-//        this.bookmark = false;
-//    }
+    @ManyToOne
+    @JoinColumn(name = "deck_id")
+    private Deck deck;
 
-
-//    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "moduleId")
-////    @Column(insertable = false, updatable = false)
-//    private Module module; // the related Module entity
 
 
     public Card(String question, String answer, String level, String deckName, String stackName) {
@@ -104,6 +88,11 @@ public class Card {
 //        this.likes = 0;
 //        this.bookmark = false;
     }
+
+    public void setDateCreated(LocalDateTime now) {
+        this.dateCreated = LocalDateTime.from(now);
+    }
+
 
 //    public void addLike() {
 //        if ( likes == null ) {

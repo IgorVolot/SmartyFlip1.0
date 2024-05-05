@@ -21,7 +21,7 @@ public interface DeckService {
 
     DeckDto editDeck(Integer deckId, NewDeckDto newDeckDto);
 
-    DeckDto deleteDeck(Integer deckId);
+    boolean deleteDeck(Integer deckId);
 
     Iterable<DeckDto> findDecksByAuthor(String authorName);
 
@@ -31,7 +31,7 @@ public interface DeckService {
 
     Iterable<DeckDto> findDecksByName(String deckName);
 
-    void increaseCardsCount(Integer moduleId);
+    int cardsCount(Integer moduleId);
 
     Iterable<DeckDto> findAllDecks();
 

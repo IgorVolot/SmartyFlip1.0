@@ -40,7 +40,7 @@ public class DeckController {
     }
 
     @DeleteMapping("/{deckId}")
-    public DeckDto deleteDeck(@PathVariable Integer deckId) {
+    public boolean deleteDeck(@PathVariable Integer deckId) {
         return deckService.deleteDeck(deckId);
     }
 

@@ -9,9 +9,12 @@ package smartyflip.decks.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import smartyflip.cards.model.Card;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -22,44 +25,48 @@ import java.util.Set;
 @Table(name = "deck")
 public class Deck {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer deckId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer deckId;
     @Setter
-    String deckName;
+    private String deckName;
 
     @Setter
-    String authorName;
+    private String authorName;
 
     LocalDateTime dateCreated = LocalDateTime.now();
 
     @Setter
-    String stackName;
+    private String stackName;
 
     @Setter
-    boolean isPublic;
+    private boolean isPublic;
 
 //    boolean bookmark;
 
-    int cardsCount;
+    Integer cardsAmount;
 
     @ElementCollection
-    @CollectionTable(name = "tag", joinColumns = @JoinColumn(name = "deck_id"))
     @Column(name = "tag")
+    @Setter
     Set<String> tags = new HashSet<>();
+
+//    @ManyToOne
+//    @JoinColumn(name="stack_id")
+//    private Stack stack;
+
+    @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Card> cards = new HashSet<>();
 
     public Deck(String deckName, String authorName, String stackName, Set<String> tags, boolean isPublic) {
         this.deckName = deckName;
         this.authorName = authorName;
         this.stackName = stackName;
         this.tags = tags;
-        this.isPublic = isPublic;
+        this.isPublic = true;
     }
 
-    public void increaseCardsCount() {
-        cardsCount++;
-    }
-    public void decreaseCardsCount() {
-        cardsCount--;
+    public void cardsCount() {
+        cards.size();
     }
 
     public boolean removeTag(String tag) {

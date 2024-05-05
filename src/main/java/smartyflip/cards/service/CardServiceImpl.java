@@ -124,7 +124,7 @@ public class CardServiceImpl implements CardService {
             return Collections.emptyList();
         }
         try {
-            return cardRepository.findAllCardsByDeckId(deckId)
+            return cardRepository.findAllCardsByDeckDeckId(deckId)
                     .map(this::mapToDto).collect(Collectors.toList());
         } catch (Exception e) {
             //consider logging the error message for debugging
