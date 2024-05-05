@@ -12,8 +12,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import smartyflip.decks.model.Deck;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 public interface DeckRepository extends JpaRepository<Deck, Integer> {
-    Stream<Deck> findAllByDateCreatedBetween(LocalDate dateFrom, LocalDate dateTo);
+    Stream<Deck> findAllByDateCreatedBetween(LocalDateTime dateFrom, LocalDateTime dateTo);
 }

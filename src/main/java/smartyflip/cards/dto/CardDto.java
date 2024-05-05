@@ -103,5 +103,7 @@ public class CardDto {
 
     Integer deckId;
 
+    String deckName;
+
     String stackName;
 }

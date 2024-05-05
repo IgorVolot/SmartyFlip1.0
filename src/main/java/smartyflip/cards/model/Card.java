@@ -95,14 +95,12 @@ public class Card {
 //    private Module module; // the related Module entity
 
 
-    @Getter
-    @Setter
-    private String moduleName;
-
-    public Card(String question, String answer, String level) {
+    public Card(String question, String answer, String level, String deckName, String stackName) {
         this.question = question;
         this.answer = answer;
         this.level = level;
+        this.deckName = deckName;
+        this.stackName = stackName;
 //        this.likes = 0;
 //        this.bookmark = false;
     }

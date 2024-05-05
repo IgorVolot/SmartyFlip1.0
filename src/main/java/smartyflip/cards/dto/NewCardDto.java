@@ -24,7 +24,8 @@ public class NewCardDto {
 
     String level;
 
-    Integer deckId;
+//    Integer deckId;
+
     String deckName;
 
     String stackName;
