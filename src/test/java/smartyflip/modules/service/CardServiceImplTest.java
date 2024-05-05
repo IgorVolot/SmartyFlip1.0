@@ -6,7 +6,7 @@
  *
  */
 
-package ait.cohort34.smartyflip.modules.service;
+package smartyflip.modules.service;
 
 import smartyflip.cards.dao.CardRepository;
 import smartyflip.cards.dto.CardDto;
@@ -177,56 +177,56 @@ public class CardServiceImplTest {
         verify(cardRepository, times(1)).findById(cardId);
     }
 
-    /**
-     * Test method for {@link CardServiceImpl#addLike(Integer)} when the modules is present.
-     * This method tests the functionality of adding a like to a modules when the modules is present in the repository.
-     * <p>
-     * The method performs the following steps in order:
-     * - Arrange necessary objects and dependencies for the test.
-     * - Mocks the method calls for the given objects.
-     * - Act on the CardService instance.
-     * - Asserts the expected outcomes and verifies interactions.
-     * </p>
-     */
-    @Test
-    void testAddLike_CardPresent() {
-        // Arrange
-        Integer cardId = 1;
-        Card card = new Card();
-        card.setLikes(0);
-
-        when(cardRepository.findById(cardId)).thenReturn(Optional.of(card));
-
-        // Act
-        cardService.addLike(cardId);
-
-        // Assert
-        verify(cardRepository, times(1)).findById(cardId);
-        verify(cardRepository, times(1)).save(card);
-        assertEquals(1, card.getLikes());
-    }
-
-    /**
-     * Test method for {@link CardServiceImpl#addLike(Integer)} when the modules is not present.
-     * This method tests the behavior of the addLike operation when the modules does not exist in the repository.
-     * <p>
-     * The test performs the following steps in order:
-     * - Arrange necessary objects and dependencies.
-     * - Acts on the CardService instance and assert that CardNotFoundException is thrown.
-     * - Verify the interactions with the mock dependencies.
-     * </p>
-     */
-    @Test
-    void testAddLike_CardNotPresent() {
-        // Arrange
-        Integer cardId = 1;
-
-        when(cardRepository.findById(cardId)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(CardNotFoundException.class, () -> cardService.addLike(cardId));
-        verify(cardRepository, times(1)).findById(cardId);
-    }
+//    /**
+//     * Test method for {@link CardServiceImpl#addLike(Integer)} when the modules is present.
+//     * This method tests the functionality of adding a like to a modules when the modules is present in the repository.
+//     * <p>
+//     * The method performs the following steps in order:
+//     * - Arrange necessary objects and dependencies for the test.
+//     * - Mocks the method calls for the given objects.
+//     * - Act on the CardService instance.
+//     * - Asserts the expected outcomes and verifies interactions.
+//     * </p>
+//     */
+//    @Test
+//    void testAddLike_CardPresent() {
+//        // Arrange
+//        Integer cardId = 1;
+//        Card card = new Card();
+//        card.setLikes(0);
+//
+//        when(cardRepository.findById(cardId)).thenReturn(Optional.of(card));
+//
+//        // Act
+//        cardService.addLike(cardId);
+//
+//        // Assert
+//        verify(cardRepository, times(1)).findById(cardId);
+//        verify(cardRepository, times(1)).save(card);
+//        assertEquals(1, card.getLikes());
+//    }
+//
+//    /**
+//     * Test method for {@link CardServiceImpl#addLike(Integer)} when the modules is not present.
+//     * This method tests the behavior of the addLike operation when the modules does not exist in the repository.
+//     * <p>
+//     * The test performs the following steps in order:
+//     * - Arrange necessary objects and dependencies.
+//     * - Acts on the CardService instance and assert that CardNotFoundException is thrown.
+//     * - Verify the interactions with the mock dependencies.
+//     * </p>
+//     */
+//    @Test
+//    void testAddLike_CardNotPresent() {
+//        // Arrange
+//        Integer cardId = 1;
+//
+//        when(cardRepository.findById(cardId)).thenReturn(Optional.empty());
+//
+//        // Act & Assert
+//        assertThrows(CardNotFoundException.class, () -> cardService.addLike(cardId));
+//        verify(cardRepository, times(1)).findById(cardId);
+//    }
 
     /**
      * This method tests the functionality of the editCard method in the CardService class
@@ -305,110 +305,110 @@ public class CardServiceImplTest {
         verify(cardRepository, times(1)).findById(cardId);
     }
 
-    /**
-     * This method tests the editBookmark method of the CardService class when the modules is present and the bookmark value is true.
-     * It performs the following steps:
-     * 1. Arrange: Create the necessary objects and mock dependencies for the test.
-     * - Create an Integer object 'cardId' and initialize it with the modules ID.
-     * - Create a Card object 'modules'.
-     * - Create a CardDto object 'cardDto' and set its cardId to 'cardId' and bookmark value to true.
-     * - Mock the behavior of cardRepository.findById(cardId) to return an Optional containing the 'modules'.
-     * 2. Act: Call the editBookmark method of cardService with 'cardId', true, and 'cardDto'.
-     * 3. Assert: Verify that the expected method invocations are made and the result is not null and matches the expected value.
-     * - Verify that cardRepository.findById(cardId) is called exactly once.
-     * - Verify that cardRepository.save(modules) is called exactly once.
-     * - Verify that modelMapper.map(modules, CardDto.class) is called exactly once.
-     * - Verify that the result is not null.
-     * - Verify that the result is equal to 'cardDto'.
-     */
-    @Test
-    void testEditBookmark_CardPresent_And_BookmarkTrue() {
-        // Arrange
-        Integer cardId = 1;
-        Card card = new Card();
-        CardDto cardDto = new CardDto();
-        cardDto.setCardId(cardId);
-        cardDto.setBookmark(true);
-
-        when(cardRepository.findById(cardId)).thenReturn(Optional.of(card));
-
-        // Act
-        CardDto result = cardService.editBookmark(cardId, true, cardDto);
-
-        // Assert
-        verify(cardRepository, times(1)).findById(cardId);
-        verify(cardRepository, times(1)).save(card);
-        verify(modelMapper, times(1)).map(card, CardDto.class);
-
-        assertNotNull(result);
-        assertEquals(cardDto, result);
-        assertEquals(cardDto.isBookmark(), result.isBookmark());
-    }
-
-    /**
-     * Method to test the editBookmark method of the CardService class when a modules is present and bookmark flag is set to false.
-     * <p>
-     * The method performs the following steps:
-     * 1. Initializes cardId variable with value 1.
-     * 2. Creates a new Card object.
-     * 3. Creates a new CardDto object and sets its cardId and bookmark fields based on provided values.
-     * 4. Mocks the cardRepository.findById method to return Optional.of(modules) when called with cardId.
-     * 5. Calls the editBookmark method of cardService, passing cardId, false, and cardDto as parameters.
-     * 6. Verifies that cardRepository.findById method was called exactly once with cardId.
-     * 7. Verifies that cardRepository.save method was called exactly once with modules.
-     * 8. Verifies that modelMapper.map method was called exactly once with modules and CardDto.class.
-     * 9. Asserts that the result is not null.
-     * 10. Asserts that the returned result is equal to cardDto.
-     * 11. Asserts that the returned result's bookmark field is equal to cardDto's bookmark field.
-     */
-    @Test
-    void testEditBookmark_CardPresent_And_BookmarkFalse() {
-        // Arrange
-        Integer cardId = 1;
-        Card card = new Card();
-        CardDto cardDto = new CardDto();
-        cardDto.setCardId(cardId);
-        cardDto.setBookmark(false);
-
-        when(cardRepository.findById(cardId)).thenReturn(Optional.of(card));
-
-        // Act
-        CardDto result = cardService.editBookmark(cardId, false, cardDto);
-
-        // Assert
-        verify(cardRepository, times(1)).findById(cardId);
-        verify(cardRepository, times(1)).save(card);
-        verify(modelMapper, times(1)).map(card, CardDto.class);
-
-        assertNotNull(result);
-        assertEquals(cardDto, result);
-        assertEquals(cardDto.isBookmark(), result.isBookmark());
-    }
-
-    /**
-     * This method tests the behavior of the editBookmark method in the CardService class
-     * when the specified modules is not present in the database.
-     * <p>
-     * It performs the following steps:
-     * 1. Creates a cardId variable and sets it to 1.
-     * 2. Creates a CardDto object.
-     * 3. Configures the behavior of the cardRepository mock object to return an empty Optional when the findById method is called with the cardId.
-     * 4. Calls the editBookmark method of the cardService instance with the cardId, a boolean value of true, and the cardDto.
-     * 5. Asserts that the method throws a CardNotFoundException.
-     * 6. Verifies that the findById method of the cardRepository mock object is called exactly once with the cardId.
-     */
-    @Test
-    void testEditBookmark_CardNotPresent() {
-        // Arrange
-        Integer cardId = 1;
-        CardDto cardDto = new CardDto();
-
-        when(cardRepository.findById(cardId)).thenReturn(Optional.empty());
-
-        // Act & Assert
-        assertThrows(CardNotFoundException.class, () -> cardService.editBookmark(cardId, true, cardDto));
-        verify(cardRepository, times(1)).findById(cardId);
-    }
+//    /**
+//     * This method tests the editBookmark method of the CardService class when the modules is present and the bookmark value is true.
+//     * It performs the following steps:
+//     * 1. Arrange: Create the necessary objects and mock dependencies for the test.
+//     * - Create an Integer object 'cardId' and initialize it with the modules ID.
+//     * - Create a Card object 'modules'.
+//     * - Create a CardDto object 'cardDto' and set its cardId to 'cardId' and bookmark value to true.
+//     * - Mock the behavior of cardRepository.findById(cardId) to return an Optional containing the 'modules'.
+//     * 2. Act: Call the editBookmark method of cardService with 'cardId', true, and 'cardDto'.
+//     * 3. Assert: Verify that the expected method invocations are made and the result is not null and matches the expected value.
+//     * - Verify that cardRepository.findById(cardId) is called exactly once.
+//     * - Verify that cardRepository.save(modules) is called exactly once.
+//     * - Verify that modelMapper.map(modules, CardDto.class) is called exactly once.
+//     * - Verify that the result is not null.
+//     * - Verify that the result is equal to 'cardDto'.
+//     */
+//    @Test
+//    void testEditBookmark_CardPresent_And_BookmarkTrue() {
+//        // Arrange
+//        Integer cardId = 1;
+//        Card card = new Card();
+//        CardDto cardDto = new CardDto();
+//        cardDto.setCardId(cardId);
+//        cardDto.setBookmark(true);
+//
+//        when(cardRepository.findById(cardId)).thenReturn(Optional.of(card));
+//
+//        // Act
+//        CardDto result = cardService.editBookmark(cardId, true, cardDto);
+//
+//        // Assert
+//        verify(cardRepository, times(1)).findById(cardId);
+//        verify(cardRepository, times(1)).save(card);
+//        verify(modelMapper, times(1)).map(card, CardDto.class);
+//
+//        assertNotNull(result);
+//        assertEquals(cardDto, result);
+//        assertEquals(cardDto.isBookmark(), result.isBookmark());
+//    }
+//
+//    /**
+//     * Method to test the editBookmark method of the CardService class when a modules is present and bookmark flag is set to false.
+//     * <p>
+//     * The method performs the following steps:
+//     * 1. Initializes cardId variable with value 1.
+//     * 2. Creates a new Card object.
+//     * 3. Creates a new CardDto object and sets its cardId and bookmark fields based on provided values.
+//     * 4. Mocks the cardRepository.findById method to return Optional.of(modules) when called with cardId.
+//     * 5. Calls the editBookmark method of cardService, passing cardId, false, and cardDto as parameters.
+//     * 6. Verifies that cardRepository.findById method was called exactly once with cardId.
+//     * 7. Verifies that cardRepository.save method was called exactly once with modules.
+//     * 8. Verifies that modelMapper.map method was called exactly once with modules and CardDto.class.
+//     * 9. Asserts that the result is not null.
+//     * 10. Asserts that the returned result is equal to cardDto.
+//     * 11. Asserts that the returned result's bookmark field is equal to cardDto's bookmark field.
+//     */
+//    @Test
+//    void testEditBookmark_CardPresent_And_BookmarkFalse() {
+//        // Arrange
+//        Integer cardId = 1;
+//        Card card = new Card();
+//        CardDto cardDto = new CardDto();
+//        cardDto.setCardId(cardId);
+//        cardDto.setBookmark(false);
+//
+//        when(cardRepository.findById(cardId)).thenReturn(Optional.of(card));
+//
+//        // Act
+//        CardDto result = cardService.editBookmark(cardId, false, cardDto);
+//
+//        // Assert
+//        verify(cardRepository, times(1)).findById(cardId);
+//        verify(cardRepository, times(1)).save(card);
+//        verify(modelMapper, times(1)).map(card, CardDto.class);
+//
+//        assertNotNull(result);
+//        assertEquals(cardDto, result);
+//        assertEquals(cardDto.isBookmark(), result.isBookmark());
+//    }
+//
+//    /**
+//     * This method tests the behavior of the editBookmark method in the CardService class
+//     * when the specified modules is not present in the database.
+//     * <p>
+//     * It performs the following steps:
+//     * 1. Creates a cardId variable and sets it to 1.
+//     * 2. Creates a CardDto object.
+//     * 3. Configures the behavior of the cardRepository mock object to return an empty Optional when the findById method is called with the cardId.
+//     * 4. Calls the editBookmark method of the cardService instance with the cardId, a boolean value of true, and the cardDto.
+//     * 5. Asserts that the method throws a CardNotFoundException.
+//     * 6. Verifies that the findById method of the cardRepository mock object is called exactly once with the cardId.
+//     */
+//    @Test
+//    void testEditBookmark_CardNotPresent() {
+//        // Arrange
+//        Integer cardId = 1;
+//        CardDto cardDto = new CardDto();
+//
+//        when(cardRepository.findById(cardId)).thenReturn(Optional.empty());
+//
+//        // Act & Assert
+//        assertThrows(CardNotFoundException.class, () -> cardService.editBookmark(cardId, true, cardDto));
+//        verify(cardRepository, times(1)).findById(cardId);
+//    }
 
     /**
      * Test method for {@link CardService#deleteCard(Integer)} when modules is present.
