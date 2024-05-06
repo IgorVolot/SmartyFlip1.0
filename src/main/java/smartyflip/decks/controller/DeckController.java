@@ -10,7 +10,7 @@ package smartyflip.decks.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import smartyflip.cards.dto.DatePeriodDto;
+import smartyflip.decks.dto.DatePeriodDto;
 import smartyflip.decks.dto.DeckDto;
 import smartyflip.decks.dto.NewDeckDto;
 import smartyflip.decks.service.DeckService;
@@ -55,7 +55,7 @@ public class DeckController {
     }
 
     @PostMapping("/period")
-    public Iterable<DeckDto> findDecksByPeriod(DatePeriodDto datePeriodDto) {
+    public Iterable<DeckDto> findDecksByPeriod(@RequestBody DatePeriodDto datePeriodDto) {
         return deckService.findDecksByPeriod(datePeriodDto);
     }
 
@@ -65,12 +65,17 @@ public class DeckController {
     }
 
     @GetMapping("/decks/stacks/{stackName}")
-    public Iterable<DeckDto> findDecksByStack(String stackName) {
+    public Iterable<DeckDto> findDecksByStack(@PathVariable String stackName) {
         return deckService.findDecksByStack(stackName);
     }
 
     @GetMapping("/decks/{isPublic}")
-    public Iterable<DeckDto> findDecksByPublic(boolean isPublic) {
+    public Iterable<DeckDto> findDecksByPublic(@RequestBody boolean isPublic) {
         return deckService.findDecksByPublic(isPublic);
+    }
+
+    @GetMapping("")
+    public Iterable<DeckDto> findAllDecks() {
+        return deckService.findAllDecks();
     }
 }

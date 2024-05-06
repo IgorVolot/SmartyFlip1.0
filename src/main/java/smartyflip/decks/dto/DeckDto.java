@@ -11,6 +11,7 @@ package smartyflip.decks.dto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class DeckDto {
 
     private String authorName;
 
-    private LocalDateTime dateCreated;
+    private LocalDate dateCreated;
 
     private String stackName;
 

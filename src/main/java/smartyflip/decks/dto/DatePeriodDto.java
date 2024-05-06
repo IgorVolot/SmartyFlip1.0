@@ -6,7 +6,7 @@
  *
  */
 
-package smartyflip.cards.dto;
+package smartyflip.decks.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

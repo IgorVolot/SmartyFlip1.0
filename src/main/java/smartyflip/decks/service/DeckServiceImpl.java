@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smartyflip.cards.dao.CardRepository;
-import smartyflip.cards.dto.DatePeriodDto;
+import smartyflip.decks.dto.DatePeriodDto;
 import smartyflip.decks.dao.DeckRepository;
 import smartyflip.decks.dto.DeckDto;
 import smartyflip.decks.dto.NewDeckDto;
@@ -24,7 +24,6 @@ import smartyflip.decks.dto.exceptions.DeckNotFoundException;
 import smartyflip.decks.model.Deck;
 
 import java.util.Collections;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -100,24 +99,24 @@ public class DeckServiceImpl implements DeckService {
 
     @Transactional(readOnly = true)
     @Override
-    public Set<DeckDto> findDecksByTags(Set<String> tags) {
-        if (tags == null) {
-            throw new IllegalArgumentException("Tags cannot be null");
+    public Iterable<DeckDto> findDecksByTags(Set<String> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return Collections.emptyList();
         }
-        return tags.stream()
-                .filter(Objects::nonNull)
-                .map(String::trim)
-                .flatMap(deckRepository::findDecksByTagsIgnoreCase)
-                .distinct()
-                .map(deck -> modelMapper.map(deck, DeckDto.class))
+
+        Set<String> lowerCaseTags = tags.stream()
+                .map(String::toLowerCase)
                 .collect(Collectors.toSet());
+        return lowerCaseTags.stream()
+                .map(deck -> modelMapper.map(deck, DeckDto.class))
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     @Override
     public Iterable<DeckDto> findDecksByPeriod(DatePeriodDto datePeriodDto) {
         return deckRepository
-                .findAllByDateCreatedBetween(datePeriodDto.getDateFrom().atStartOfDay(), datePeriodDto.getDateTo().atStartOfDay())
+                .findAllByDateCreatedBetween(datePeriodDto.getDateFrom(), datePeriodDto.getDateTo())
                 .map(deck -> modelMapper.map(deck, DeckDto.class))
                 .collect(Collectors.toList());
     }

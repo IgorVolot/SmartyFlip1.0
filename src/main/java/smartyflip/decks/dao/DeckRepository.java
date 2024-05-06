@@ -15,20 +15,17 @@ import org.springframework.stereotype.Repository;
 import smartyflip.decks.model.Deck;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Stream;
 
-@Repository
+//@Repository
 public interface DeckRepository extends JpaRepository<Deck, Integer> {
-    Stream<Deck> findAllByDateCreatedBetween(LocalDateTime dateFrom, LocalDateTime dateTo);
+    Stream<Deck> findAllByDateCreatedBetween(LocalDate dateFrom, LocalDate dateTo);
 
     Stream<Deck> findDecksByAuthorNameIgnoreCase(String authorName);
 
-    @Query("select d from Deck d where :tags member of d.tags")
-    Stream<Deck> findDecksByTagsIgnoreCase(@Param("tags") String tags);
-
-    Stream<Deck> findDecksByDateCreatedBetween(LocalDateTime dateFrom, LocalDateTime dateTo);
+//    @Query("select d from Deck d where :tags member of d.tags")
+//    Stream<Deck> findAllByTagsIgnoreCase(@Param("tags") Set<String> tags);
 
     Stream<Deck> findDecksByDeckNameIgnoreCase(String deckName);
 

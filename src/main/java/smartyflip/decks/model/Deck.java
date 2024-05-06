@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import smartyflip.cards.model.Card;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,7 +34,7 @@ public class Deck {
     @Setter
     private String authorName;
 
-    LocalDateTime dateCreated = LocalDateTime.now();
+    LocalDate dateCreated = LocalDate.now();
 
     @Setter
     private String stackName;

@@ -8,7 +8,7 @@
 
 package smartyflip.decks.service;
 
-import smartyflip.cards.dto.DatePeriodDto;
+import smartyflip.decks.dto.DatePeriodDto;
 import smartyflip.decks.dto.DeckDto;
 import smartyflip.decks.dto.NewDeckDto;
 
