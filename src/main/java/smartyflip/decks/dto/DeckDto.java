@@ -32,14 +32,8 @@ public class DeckDto {
 
     private String stackName;
 
-    private boolean isPublic;
-
     private int cardsCount;
 
     @Singular
     Set<String> tags;
-
-//    public void increaseCardsCount() {
-//        cardsCount++;
-//    }
 }

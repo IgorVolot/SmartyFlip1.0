@@ -39,8 +39,6 @@ public class Deck {
     @Setter
     private String stackName;
 
-    @Setter
-    private boolean isPublic;
 
 //    boolean bookmark;
 
@@ -58,12 +56,11 @@ public class Deck {
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Card> cards = new HashSet<>();
 
-    public Deck(String deckName, String authorName, String stackName, Set<String> tags, boolean isPublic) {
+    public Deck(String deckName, String authorName, String stackName, Set<String> tags) {
         this.deckName = deckName;
         this.authorName = authorName;
         this.stackName = stackName;
         this.tags = tags;
-        this.isPublic = true;
     }
 
     public void cardsCount() {

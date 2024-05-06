@@ -25,17 +25,13 @@ public interface DeckService {
 
     Iterable<DeckDto> findDecksByAuthor(String authorName);
 
-    Iterable<DeckDto> findDecksByTags(Set<String> tags);
-
     Iterable<DeckDto> findDecksByPeriod(DatePeriodDto datePeriodDto);
 
     Iterable<DeckDto> findDecksByName(String deckName);
 
-    int cardsCount(Integer moduleId);
+    int cardsCount(Integer deckId);
 
     Iterable<DeckDto> findAllDecks();
 
     Iterable<DeckDto> findDecksByStack(String stackName);
-
-    Iterable<DeckDto> findDecksByPublic(boolean isPublic);
 }

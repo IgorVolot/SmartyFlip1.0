@@ -24,13 +24,10 @@ public interface DeckRepository extends JpaRepository<Deck, Integer> {
 
     Stream<Deck> findDecksByAuthorNameIgnoreCase(String authorName);
 
-//    @Query("select d from Deck d where :tags member of d.tags")
-//    Stream<Deck> findAllByTagsIgnoreCase(@Param("tags") Set<String> tags);
+//    @Query("select d from Deck d where :tag member of d.tags")
+//    Stream<Deck> findAllByTagsIgnoreCase(Set<String> tags);
 
     Stream<Deck> findDecksByDeckNameIgnoreCase(String deckName);
 
-    Stream<Deck> findDecksByStackNameIgnoreCase(String stackName);
-
-    @Query("select d from Deck d where d.isPublic = ?1")
-    Stream<Deck> findDecksByPublic(boolean isPublic);
+    Stream<Deck> findAllByStackNameIgnoreCase(String stackName);
 }

@@ -19,6 +19,5 @@ public class NewDeckDto {
     String authorName;
     Set<String> tags;
     String stackName;
-    boolean isPublic;
 
 }

@@ -24,6 +24,8 @@ import smartyflip.decks.dto.exceptions.DeckNotFoundException;
 import smartyflip.decks.model.Deck;
 
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -71,7 +73,6 @@ public class DeckServiceImpl implements DeckService {
         deck.setAuthorName(newDeckDto.getAuthorName());
         deck.setStackName(newDeckDto.getStackName());
         deck.setTags(newDeckDto.getTags());
-        deck.setPublic(newDeckDto.isPublic());
         deck = deckRepository.save(deck);
         return modelMapper.map(deck, DeckDto.class);
     }
@@ -97,20 +98,7 @@ public class DeckServiceImpl implements DeckService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Iterable<DeckDto> findDecksByTags(Set<String> tags) {
-        if (tags == null || tags.isEmpty()) {
-            return Collections.emptyList();
-        }
 
-        Set<String> lowerCaseTags = tags.stream()
-                .map(String::toLowerCase)
-                .collect(Collectors.toSet());
-        return lowerCaseTags.stream()
-                .map(deck -> modelMapper.map(deck, DeckDto.class))
-                .collect(Collectors.toList());
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -149,16 +137,7 @@ public class DeckServiceImpl implements DeckService {
     @Override
     public Iterable<DeckDto> findDecksByStack(String stackName) {
         return deckRepository
-                .findDecksByStackNameIgnoreCase(stackName)
-                .map(deck -> modelMapper.map(deck, DeckDto.class))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Iterable<DeckDto> findDecksByPublic(boolean isPublic) {
-        return deckRepository
-                .findDecksByPublic(isPublic)
+                .findAllByStackNameIgnoreCase(stackName)
                 .map(deck -> modelMapper.map(deck, DeckDto.class))
                 .collect(Collectors.toList());
     }

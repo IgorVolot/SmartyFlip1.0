@@ -49,10 +49,10 @@ public class DeckController {
         return deckService.findDecksByAuthor(user);
     }
 
-    @PostMapping("/tags")
-    public Iterable<DeckDto> findDecksByTags(@RequestBody Set<String> tags) {
-        return deckService.findDecksByTags(tags);
-    }
+//    @PostMapping("/tags")
+//    public Iterable<DeckDto> findDecksByTags(@RequestBody Set<String> tags) {
+//        return deckService.findDecksByTags(tags);
+//    }
 
     @PostMapping("/period")
     public Iterable<DeckDto> findDecksByPeriod(@RequestBody DatePeriodDto datePeriodDto) {
@@ -64,14 +64,9 @@ public class DeckController {
         return deckService.findDecksByName(deckName);
     }
 
-    @GetMapping("/decks/stacks/{stackName}")
+    @GetMapping("/stacks/{stackName}")
     public Iterable<DeckDto> findDecksByStack(@PathVariable String stackName) {
         return deckService.findDecksByStack(stackName);
-    }
-
-    @GetMapping("/decks/{isPublic}")
-    public Iterable<DeckDto> findDecksByPublic(@RequestBody boolean isPublic) {
-        return deckService.findDecksByPublic(isPublic);
     }
 
     @GetMapping("")
