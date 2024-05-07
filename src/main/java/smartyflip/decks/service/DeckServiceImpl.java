@@ -10,6 +10,7 @@ package smartyflip.decks.service;
 
 
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,23 +31,21 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DeckServiceImpl implements DeckService {
 
-    @NonNull
-    @Autowired
     final DeckRepository deckRepository;
 
-    @NonNull
     final CardRepository cardRepository;
-    @NonNull
+
     final ModelMapper modelMapper;
 
-    public DeckServiceImpl(DeckRepository deckRepository, CardRepository cardRepository, ModelMapper modelMapper) {
-        this.deckRepository = deckRepository;
-        this.cardRepository = cardRepository;
-        this.modelMapper = modelMapper;
-        this.modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-    }
+//    public DeckServiceImpl(DeckRepository deckRepository, CardRepository cardRepository, ModelMapper modelMapper) {
+//        this.deckRepository = deckRepository;
+//        this.cardRepository = cardRepository;
+//        this.modelMapper = modelMapper;
+//        this.modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+//    }
 
     private Deck findDeckOrThrow(Integer moduleId) {
         return deckRepository.findById(moduleId).orElseThrow(DeckNotFoundException::new);
@@ -72,7 +71,7 @@ public class DeckServiceImpl implements DeckService {
         deck.setDeckName(newDeckDto.getDeckName());
         deck.setAuthorName(newDeckDto.getAuthorName());
         deck.setStackName(newDeckDto.getStackName());
-        deck.setTags(newDeckDto.getTags());
+//        deck.setTags(newDeckDto.getTags());
         deck = deckRepository.save(deck);
         return modelMapper.map(deck, DeckDto.class);
     }

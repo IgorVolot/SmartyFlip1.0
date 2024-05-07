@@ -6,18 +6,18 @@
  *
  */
 
-package smartyflip.decks.dto;
+package smartyflip.tags.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Set;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-public class NewDeckDto {
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+public class TagDto {
 
-    String deckName;
-    String authorName;
-//    Set<String> tags;
-    String stackName;
-
+    private String tag;
 }

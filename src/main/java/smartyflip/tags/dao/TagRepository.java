@@ -6,18 +6,10 @@
  *
  */
 
-package smartyflip.decks.dto;
+package smartyflip.tags.dao;
 
-import lombok.Getter;
+import org.springframework.data.jpa.repository.JpaRepository;
+import smartyflip.tags.model.Tag;
 
-import java.util.Set;
-
-@Getter
-public class NewDeckDto {
-
-    String deckName;
-    String authorName;
-//    Set<String> tags;
-    String stackName;
-
+public interface TagRepository extends JpaRepository<Tag, String> {
 }

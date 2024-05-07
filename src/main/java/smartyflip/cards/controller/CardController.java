@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/cards")
 public class CardController {
 
-    private final CardService cardService;
+    final CardService cardService;
 
     @PostMapping("")
     public CardDto addCard(@RequestBody NewCardDto newCardDto) {

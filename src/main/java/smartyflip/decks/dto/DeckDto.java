@@ -18,7 +18,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Builder
+//@Builder
 public class DeckDto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,6 +34,6 @@ public class DeckDto {
 
     private int cardsCount;
 
-    @Singular
-    Set<String> tags;
+//    @Singular
+//    Set<String> tags;
 }

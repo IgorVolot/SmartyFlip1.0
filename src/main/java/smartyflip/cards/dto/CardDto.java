@@ -18,38 +18,12 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-/**
- * This class represents a Data Transfer Object (DTO) for a Card.
- * It encapsulates the necessary data fields for a Card.
- * It provides getters and setters for each data field.
- */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 public class CardDto {
-    /**
-     * Represents the ID of a decks.
-     *
-     * <p>
-     * The cardId variable is used to uniquely identify a decks. It is annotated with
-     * {@code @Id} and {@code @GeneratedValue} to indicate that it is the primary key of the entity.
-     * The {@code @GeneratedValue} annotation specifies the strategy for generating the ID values,
-     * in this case, it is set to {@code GenerationType.AUTO}.
-     * </p>
-     *
-     * <p>
-     * Example usage:
-     * </p>
-     * <pre>{@code
-     *   CardDto decks = new CardDto();
-     *   decks.setCardId(1);
-     * }</pre>
-     *
-     * @see Id
-     * @see GeneratedValue
-     * @see GenerationType
-     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer cardId;

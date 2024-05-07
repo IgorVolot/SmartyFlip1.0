@@ -10,6 +10,8 @@ package smartyflip.decks.model;
 import jakarta.persistence.*;
 import lombok.*;
 import smartyflip.cards.model.Card;
+import smartyflip.stacks.model.Stack;
+import smartyflip.tags.model.Tag;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,15 +41,21 @@ public class Deck {
     @Setter
     private String stackName;
 
+    Integer cardsAmount;
 
 //    boolean bookmark;
 
-    Integer cardsAmount;
+    @ManyToMany
+    @JoinTable(name = "deck_tags",
+            joinColumns = @JoinColumn(name = "deck_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new HashSet<>();
 
-    @ElementCollection
-    @Column(name = "tag")
-    @Setter
-    Set<String> tags = new HashSet<>();
+
+//    @ElementCollection
+//    @Column(name = "tag")
+//    @Setter
+//    Set<String> tags = new HashSet<>();
 
 //    @ManyToOne
 //    @JoinColumn(name="stack_id")
@@ -56,22 +64,26 @@ public class Deck {
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Card> cards = new HashSet<>();
 
-    public Deck(String deckName, String authorName, String stackName, Set<String> tags) {
+    public Deck(String deckName, String authorName, String stackName) {
         this.deckName = deckName;
         this.authorName = authorName;
         this.stackName = stackName;
-        this.tags = tags;
     }
 
-    public void cardsCount() {
-        cards.size();
+    @ManyToOne
+    @JoinColumn(name = "stack_stack_name")
+    Stack stack;
+
+    public int cardsCount() {
+
+        return cards.size();
     }
 
-    public boolean removeTag(String tag) {
-        return tags.remove(tag);
-    }
-
-    public boolean addTag(String tag) {
-        return tags.add(tag);
-    }
+//    public boolean removeTag(String tag) {
+//        return tags.remove(tag);
+//    }
+//
+//    public boolean addTag(String tag) {
+//        return tags.add(tag);
+//    }
 }
