@@ -14,6 +14,7 @@ import smartyflip.stacks.model.Stack;
 import java.util.List;
 
 public interface StackService {
+
     StackDto addStack(StackDto stackDto);
 
     boolean removeStack(String stackName);
@@ -23,4 +24,6 @@ public interface StackService {
     StackDto editStack(String stackName, StackDto stackDto);
 
     List<Stack> getAllStacks();
+
+    int getStackDecksCount(String stackName);
 }

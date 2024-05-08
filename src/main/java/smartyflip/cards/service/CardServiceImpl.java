@@ -82,18 +82,6 @@ public class CardServiceImpl implements CardService {
 
 
 //    /**
-//     * Edits the bookmark status of a decks with the given cardId. If the decks is found,
-//     * the bookmark status is updated based on the provided boolean value. If the bookmark
-//     * value provided is true, the decks is bookmarked. If the bookmark value provided is false,
-//     * the decks is unbookmarked. The edited decks is saved in the repository and the updated
-//     * decks DTO is returned.
-//     *
-//     * @param cardId   The ID of the decks to be edited.
-//     * @param bookmark The new bookmark status of the decks.
-//     * @param cardDto  The decks DTO representing the updated decks details.
-//     * @return The edited decks DTO.
-//     * @throws CardNotFoundException If the decks with the given cardId is not found.
-//     */
 //    @Override
 //    public CardDto editBookmark(Integer cardId, boolean bookmark, CardDto cardDto) {
 //        Card card = cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));

@@ -9,6 +9,7 @@
 package smartyflip.decks.dto;
 
 import lombok.Getter;
+import smartyflip.decks.model.Tag;
 
 import java.util.Set;
 
@@ -17,7 +18,7 @@ public class NewDeckDto {
 
     String deckName;
     String authorName;
-//    Set<String> tags;
     String stackName;
+    Set<Tag> tags;
 
 }

@@ -24,8 +24,7 @@ public interface DeckRepository extends JpaRepository<Deck, Integer> {
 
     Stream<Deck> findDecksByAuthorNameIgnoreCase(String authorName);
 
-//    @Query("select d from Deck d where :tag member of d.tags")
-//    Stream<Deck> findAllByTagsIgnoreCase(Set<String> tags);
+    Stream<Deck> findDeckByTag(String tag);
 
     Stream<Deck> findDecksByDeckNameIgnoreCase(String deckName);
 

@@ -6,38 +6,31 @@
  *
  */
 
-package smartyflip.tags.controller;
+package smartyflip.decks.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import smartyflip.decks.service.DeckService;
-import smartyflip.tags.dto.TagDto;
-import smartyflip.tags.model.Tag;
-import smartyflip.tags.service.TagService;
-
-import java.util.Set;
+import smartyflip.decks.service.TagService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/decks/tags")
+@RequestMapping("/api/v1/decks/{deckId}/tags")
 public class TagController {
 
-    private final TagService tagService;
+    final DeckService deckService;
 
-    private final DeckService deckService;
+    final TagService tagService;
 
-    @PatchMapping("")
-    public TagDto addTag(@PathVariable Integer deckId, @RequestBody TagDto tagDto) {
-        return tagService.addTag(deckId, tagDto);
+    @PatchMapping("/{tag}")
+    public boolean addTag(@PathVariable Integer deckId, @PathVariable String tag) {
+        return tagService.addTag(deckId, tag);
     }
+
 
     @GetMapping("/{tag}")
     public boolean deleteTag(@PathVariable Integer deckId, @PathVariable String tag) {
         return tagService.deleteTag(deckId, tag);
     }
 
-    @GetMapping("")
-    public Set<Tag> getAllTags() {
-        return tagService.getAllTags();
-    }
 }

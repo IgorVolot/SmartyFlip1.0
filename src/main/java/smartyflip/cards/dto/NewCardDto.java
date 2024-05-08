@@ -30,7 +30,4 @@ public class NewCardDto {
 
     String stackName;
 
-    public String getModuleName() {
-        return null;
-    }
 }

@@ -29,9 +29,11 @@ public interface DeckService {
 
     Iterable<DeckDto> findDecksByName(String deckName);
 
-    int cardsCount(Integer deckId);
-
     Iterable<DeckDto> findAllDecks();
 
     Iterable<DeckDto> findDecksByStack(String stackName);
+
+    Iterable<DeckDto> findAllDecksByTag(String tag);
+
+    int cardsAmountByDeckId(Integer deckId);
 }

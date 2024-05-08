@@ -11,6 +11,7 @@ package smartyflip.cards.model;
 import jakarta.persistence.*;
 import lombok.*;
 import smartyflip.decks.model.Deck;
+import smartyflip.stacks.model.Stack;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @EqualsAndHashCode(of = "cardId")
 @Entity
 @Table(name = "cards")
@@ -25,58 +27,27 @@ public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer cardId;
+    Integer cardId;
 
-    @Setter
-    private String question;
+    String question;
 
-    @Setter
-    private String answer;
+    String answer;
 
-    private LocalDateTime dateCreated;
+    LocalDateTime dateCreated;
 
-    @Setter
-    private String level;
+    String level;
 
-//    /**
-//     * This variable represents the number of likes a decks has received.
-//     * It is an instance of the Integer class, which is a wrapper class for the primitive type int.
-//     * The value of this variable can be null, indicating that the decks has not received any likes yet.
-//     * To access or modify the value of this variable, use the appropriate getters and setters methods provided by the Card class.
-//     *
-//     * Example usage:
-//     *
-//     * Card decks = new Card();
-//     * decks.setLikes(10); // Set the number of likes to 10
-//     * int likes = decks.getLikes(); // Get the number of likes
-//     *
-//     * Note: The Card class is defined in the same package, so you can directly access and modify the likes variable without any additional imports.
-//     */
-//    @Setter
-//    private Integer likes;
-//
-//    /**
-//     * The bookmark variable represents whether a decks has been bookmarked or not.
-//     *
-//     * If the value of bookmark is true, it means that the decks has been bookmarked.
-//     * If the value of bookmark is false, it means that the decks has not been bookmarked.
-//     */
-//    @Setter
-//    private boolean bookmark;
+    String deckName;
 
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private Integer deckId;
-
-    @Setter
-    private String deckName;
-
-    @Setter
-    private String stackName;
+    String stackName;
 
     @ManyToOne
-    @JoinColumn(name = "deck_id")
-    private Deck deck;
+    @JoinColumn(name = "deck_deck_id")
+    Deck deck;
 
+    @ManyToOne
+    @JoinColumn(name = "stack_stack_name")
+    Stack stack;
 
 
     public Card(String question, String answer, String level, String deckName, String stackName) {
@@ -85,8 +56,6 @@ public class Card {
         this.level = level;
         this.deckName = deckName;
         this.stackName = stackName;
-//        this.likes = 0;
-//        this.bookmark = false;
     }
 
     public void setDateCreated(LocalDateTime now) {

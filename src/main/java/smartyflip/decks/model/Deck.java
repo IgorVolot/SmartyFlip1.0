@@ -11,58 +11,48 @@ import jakarta.persistence.*;
 import lombok.*;
 import smartyflip.cards.model.Card;
 import smartyflip.stacks.model.Stack;
-import smartyflip.tags.model.Tag;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @EqualsAndHashCode(of = "deckId")
 @Entity
 @Table(name = "deck")
 public class Deck {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer deckId;
-    @Setter
-    private String deckName;
+    @Column(name = "deckId")
+    Integer deckId;
 
-    @Setter
-    private String authorName;
+    @Column(name = "deckName")
+    String deckName;
+    @Column(name = "userName")
+    String authorName;
 
-    LocalDate dateCreated = LocalDate.now();
+    @Column(name = "dateCreated")
+    LocalDate dateCreated;
 
-    @Setter
-    private String stackName;
+    @Column(name = "stackName")
+    String stackName;
 
-    Integer cardsAmount;
+    @Column(name = "totalCards")
+    int cardsAmount;
 
-//    boolean bookmark;
-
-    @ManyToMany
-    @JoinTable(name = "deck_tags",
+    @ManyToMany(mappedBy = "decks", cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "deck_tags",
             joinColumns = @JoinColumn(name = "deck_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags = new HashSet<>();
+            inverseJoinColumns = @JoinColumn(name = "tags"))
+    Set<Tag> tags;
 
-
-//    @ElementCollection
-//    @Column(name = "tag")
-//    @Setter
-//    Set<String> tags = new HashSet<>();
-
-//    @ManyToOne
-//    @JoinColumn(name="stack_id")
-//    private Stack stack;
 
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Card> cards = new HashSet<>();
+    Set<Card> cards;
 
     public Deck(String deckName, String authorName, String stackName) {
         this.deckName = deckName;
@@ -74,16 +64,21 @@ public class Deck {
     @JoinColumn(name = "stack_stack_name")
     Stack stack;
 
-    public int cardsCount() {
-
-        return cards.size();
+    public int cardsAmount() {
+        cardsAmount = cards.size();
+        return cardsAmount;
     }
 
-//    public boolean removeTag(String tag) {
-//        return tags.remove(tag);
-//    }
-//
-//    public boolean addTag(String tag) {
-//        return tags.add(tag);
-//    }
+    public void addCard(Card card) {
+        if(card==null){
+            throw new IllegalArgumentException("Card cannot be null");
+        }
+        this.cards.add(card);
+        card.setDeck(this);
+    }
+
+    public void removeDeck(Card card) {
+        this.cards.remove(card);
+        card.setDeck(null);
+    }
 }

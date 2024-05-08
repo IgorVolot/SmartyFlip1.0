@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smartyflip.cards.dao.CardRepository;
+import smartyflip.cards.model.Card;
+import smartyflip.decks.dao.TagRepository;
 import smartyflip.decks.dto.DatePeriodDto;
 import smartyflip.decks.dao.DeckRepository;
 import smartyflip.decks.dto.DeckDto;
@@ -35,6 +37,8 @@ import java.util.stream.Collectors;
 public class DeckServiceImpl implements DeckService {
 
     final DeckRepository deckRepository;
+
+    final TagRepository tagRepository;
 
     final CardRepository cardRepository;
 
@@ -117,12 +121,6 @@ public class DeckServiceImpl implements DeckService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    @Override
-    public int cardsCount(Integer deckId) {
-        Deck deck = findDeckOrThrow(deckId);
-        return deck.getCardsAmount();
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -139,5 +137,24 @@ public class DeckServiceImpl implements DeckService {
                 .findAllByStackNameIgnoreCase(stackName)
                 .map(deck -> modelMapper.map(deck, DeckDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Iterable<DeckDto> findAllDecksByTag(String tag) {
+        return deckRepository.findDeckByTag(tag)
+                .map(deck -> modelMapper.map(deck, DeckDto.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public int cardsAmountByDeckId(Integer deckId) {
+        Deck deck = findDeckOrThrow(deckId);
+        return deck.cardsAmount();
+    }
+
+    public void addCardToDeck(Deck deck, Card card) {
+        deck.addCard(card);
+        deckRepository.save(deck);
     }
 }

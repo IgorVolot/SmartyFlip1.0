@@ -13,6 +13,4 @@ import smartyflip.stacks.model.Stack;
 
 public interface StackRepository extends JpaRepository<Stack, Integer> {
     Stack findByStackNameIgnoreCase(String stackName);
-
-    Stack findByStackId(Integer stackId);
 }

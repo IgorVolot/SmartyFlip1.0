@@ -6,19 +6,16 @@
  *
  */
 
-package smartyflip.tags.service;
+package smartyflip.decks.service;
 
-import smartyflip.tags.dto.TagDto;
-import smartyflip.tags.model.Tag;
+import smartyflip.decks.model.Tag;
 
-import java.util.Set;
 
 public interface TagService {
-    TagDto addTag(Integer deckId, TagDto tag);
+    boolean addTag(Integer deckId, String tag);
 
     boolean deleteTag(Integer deckId, String tag);
 
-    Set<TagDto> findTagsInDeck(Integer deckId);
+    Iterable<Tag> findTagsByDeckId(Integer deckId);
 
-    Set<Tag> getAllTags();
 }

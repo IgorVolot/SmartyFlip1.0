@@ -14,15 +14,16 @@ import smartyflip.decks.dto.DatePeriodDto;
 import smartyflip.decks.dto.DeckDto;
 import smartyflip.decks.dto.NewDeckDto;
 import smartyflip.decks.service.DeckService;
-
-import java.util.Set;
+import smartyflip.decks.service.TagService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/decks")
 public class DeckController {
 
-    private final DeckService deckService;
+    final DeckService deckService;
+
+    final TagService tagService;
 
     @PostMapping("")
     public DeckDto addDeck(@RequestBody NewDeckDto newDeckDto) {
@@ -49,11 +50,6 @@ public class DeckController {
         return deckService.findDecksByAuthor(user);
     }
 
-//    @PostMapping("/tags")
-//    public Iterable<DeckDto> findDecksByTags(@RequestBody Set<String> tags) {
-//        return deckService.findDecksByTags(tags);
-//    }
-
     @PostMapping("/period")
     public Iterable<DeckDto> findDecksByPeriod(@RequestBody DatePeriodDto datePeriodDto) {
         return deckService.findDecksByPeriod(datePeriodDto);
@@ -72,5 +68,10 @@ public class DeckController {
     @GetMapping("")
     public Iterable<DeckDto> findAllDecks() {
         return deckService.findAllDecks();
+    }
+
+    @GetMapping("/{deckId}/cards/amount")
+    public int cardsCountByDeckId(@PathVariable Integer deckId) {
+        return deckService.cardsAmountByDeckId(deckId);
     }
 }

@@ -24,15 +24,16 @@ import java.util.Set;
 public class Stack {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer stackId;
+    Integer stackId;
 
     @Column(name = "stack_name")
-    private String stackName;
+    String stackName;
 
-    private int decksCount;
+    int decksCount;
 
     @OneToMany(mappedBy="stack", cascade = CascadeType.ALL, orphanRemoval=true)
     Set<Deck> decks;
+
 
     public Stack(String stackName, int decksCount) {
         this.stackName = stackName;
@@ -41,5 +42,18 @@ public class Stack {
 
     public int decksCount() {
         return decks.size();
+    }
+
+    public void addDeck(Deck deck) {
+        if(deck==null){
+            throw new IllegalArgumentException("Deck cannot be null");
+        }
+        this.decks.add(deck);
+        deck.setStack(this);
+    }
+
+    public void removeDeck(Deck deck) {
+        this.decks.remove(deck);
+        deck.setStack(null);
     }
 }

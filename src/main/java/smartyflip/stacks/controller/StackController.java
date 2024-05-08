@@ -46,4 +46,9 @@ public class StackController {
     public List<Stack> getAllStacks() {
         return stackService.getAllStacks();
     }
+
+    @GetMapping("/{stackName}/decks/count")
+    public int getStacksCount() {
+        return stackService.getAllStacks().size();
+    }
 }

@@ -6,10 +6,13 @@
  *
  */
 
-package smartyflip.tags.dao;
+package smartyflip.decks.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import smartyflip.tags.model.Tag;
+import smartyflip.decks.model.Tag;
+
+import java.util.stream.Stream;
 
 public interface TagRepository extends JpaRepository<Tag, String> {
+
 }

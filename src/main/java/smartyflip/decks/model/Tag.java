@@ -6,18 +6,30 @@
  *
  */
 
-package smartyflip.tags.dto;
+package smartyflip.decks.model;
 
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
-public class TagDto {
+import java.util.Set;
 
+@NoArgsConstructor
+@Getter
+@Setter
+@Entity
+@Table(name = "tag")
+public class Tag {
+
+    @Id
+    @Column(name = "tag")
     private String tag;
+
+    @ManyToMany(mappedBy = "decks")
+    Set<Deck> decks;
+
+    public Tag(String tag) {
+        this.tag = tag.toLowerCase();
+    }
 }
