@@ -11,6 +11,7 @@ package smartyflip.decks.service;
 import smartyflip.decks.dto.DatePeriodDto;
 import smartyflip.decks.dto.DeckDto;
 import smartyflip.decks.dto.NewDeckDto;
+import smartyflip.decks.model.Tag;
 
 import java.util.Set;
 
@@ -33,7 +34,7 @@ public interface DeckService {
 
     Iterable<DeckDto> findDecksByStack(String stackName);
 
-    Iterable<DeckDto> findAllDecksByTag(String tag);
+    Iterable<DeckDto> finAllDecksByTags(Set<String> tags);
 
     int cardsAmountByDeckId(Integer deckId);
 }

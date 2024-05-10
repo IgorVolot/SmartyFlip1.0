@@ -26,34 +26,21 @@ public class Stack {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer stackId;
 
-    @Column(name = "stack_name")
+    @Column(nullable = false)
+    @Setter
     String stackName;
 
-    int decksCount;
+    int decksAmount;
 
-    @OneToMany(mappedBy="stack", cascade = CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(mappedBy = "stack", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Deck> decks;
 
-
-    public Stack(String stackName, int decksCount) {
+    public Stack(String stackName, int decksAmount) {
         this.stackName = stackName;
-        this.decksCount = decksCount;
+        this.decksAmount = decksAmount;
     }
 
-    public int decksCount() {
+    public int decksAmount() {
         return decks.size();
-    }
-
-    public void addDeck(Deck deck) {
-        if(deck==null){
-            throw new IllegalArgumentException("Deck cannot be null");
-        }
-        this.decks.add(deck);
-        deck.setStack(this);
-    }
-
-    public void removeDeck(Deck deck) {
-        this.decks.remove(deck);
-        deck.setStack(null);
     }
 }

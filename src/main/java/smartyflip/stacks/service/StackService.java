@@ -23,7 +23,5 @@ public interface StackService {
 
     StackDto editStack(String stackName, StackDto stackDto);
 
-    List<Stack> getAllStacks();
-
-    int getStackDecksCount(String stackName);
+    Iterable<String> getAllStacks();
 }

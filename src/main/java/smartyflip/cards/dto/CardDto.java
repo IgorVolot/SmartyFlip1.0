@@ -16,11 +16,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
-//@AllArgsConstructor
-//@NoArgsConstructor
 @Setter
 public class CardDto {
 
@@ -32,13 +31,15 @@ public class CardDto {
 
     String answer;
 
-    LocalDateTime dateCreated;
-
     String level;
 
     Integer deckId;
 
     String deckName;
 
-    String stackName;
+//    Integer stackId;
+//
+//    String stackName;
+
+    LocalDateTime dateCreated;
 }

@@ -25,60 +25,41 @@ import java.util.Set;
 @Table(name = "deck")
 public class Deck {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "deckId")
+    @GeneratedValue(strategy=GenerationType.AUTO)
     Integer deckId;
 
-    @Column(name = "deckName")
+    @Column(name = "deckName", nullable = false)
     String deckName;
-    @Column(name = "userName")
+
     String authorName;
 
-    @Column(name = "dateCreated")
-    LocalDate dateCreated;
+    LocalDate dateCreated = LocalDate.now();
 
-    @Column(name = "stackName")
     String stackName;
 
-    @Column(name = "totalCards")
     int cardsAmount;
 
-    @ManyToMany(mappedBy = "decks", cascade = CascadeType.REMOVE)
-    @JoinTable(
-            name = "deck_tags",
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "deck_tag",
             joinColumns = @JoinColumn(name = "deck_id"),
-            inverseJoinColumns = @JoinColumn(name = "tags"))
-    Set<Tag> tags;
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new HashSet<>();
 
 
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<Card> cards;
 
-    public Deck(String deckName, String authorName, String stackName) {
-        this.deckName = deckName;
-        this.authorName = authorName;
-        this.stackName = stackName;
+    public Deck(Integer deckId) {
+        this.deckId = deckId;
     }
 
     @ManyToOne
-    @JoinColumn(name = "stack_stack_name")
+    @JoinColumn(name = "stack_stack_id")
     Stack stack;
+
 
     public int cardsAmount() {
         cardsAmount = cards.size();
         return cardsAmount;
-    }
-
-    public void addCard(Card card) {
-        if(card==null){
-            throw new IllegalArgumentException("Card cannot be null");
-        }
-        this.cards.add(card);
-        card.setDeck(this);
-    }
-
-    public void removeDeck(Card card) {
-        this.cards.remove(card);
-        card.setDeck(null);
     }
 }

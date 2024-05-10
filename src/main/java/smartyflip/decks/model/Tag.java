@@ -19,17 +19,20 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "tag")
+@Table(name = "tags")
 public class Tag {
 
     @Id
-    @Column(name = "tag")
-    private String tag;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer tagId;
 
-    @ManyToMany(mappedBy = "decks")
-    Set<Deck> decks;
+    @Column(name = "tagName", nullable = false, unique = true)
+    private String tagName;
+
+    @ManyToMany(mappedBy = "tags")
+    private Set<Deck> decks;
 
     public Tag(String tag) {
-        this.tag = tag.toLowerCase();
+        this.tagName = tag.toLowerCase();
     }
 }

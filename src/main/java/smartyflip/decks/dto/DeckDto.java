@@ -10,15 +10,18 @@ package smartyflip.decks.dto;
 
 import jakarta.persistence.*;
 import lombok.*;
+import smartyflip.cards.dto.CardDto;
+import smartyflip.cards.model.Card;
 import smartyflip.decks.model.Tag;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-//@AllArgsConstructor
-//@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@Builder
 public class DeckDto {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,10 +33,15 @@ public class DeckDto {
 
     LocalDate dateCreated;
 
+    Integer stackId;
+
     String stackName;
 
-    int cardsCount;
+    @Singular
+    Set<String> tags;
 
-    Set<Tag> tags;
+    Set<CardDto> cards;
+
+    int cardsAmount;
 
 }

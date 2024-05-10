@@ -8,14 +8,19 @@
 
 package smartyflip.decks.service;
 
+import smartyflip.decks.dto.DeckDto;
+import smartyflip.decks.model.Deck;
 import smartyflip.decks.model.Tag;
+
+import java.util.Set;
 
 
 public interface TagService {
-    boolean addTag(Integer deckId, String tag);
+
+    //    void addTagToDeck(Integer deckId, Integer tagId);
+    Iterable<String> addTagToDeck(Integer deckId, String tagName);
 
     boolean deleteTag(Integer deckId, String tag);
 
-    Iterable<Tag> findTagsByDeckId(Integer deckId);
-
+    Iterable<String> findTagsByDeckId(Integer deckId);
 }

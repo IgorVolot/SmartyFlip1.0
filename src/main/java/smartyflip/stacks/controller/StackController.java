@@ -11,10 +11,7 @@ package smartyflip.stacks.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import smartyflip.stacks.dto.StackDto;
-import smartyflip.stacks.model.Stack;
 import smartyflip.stacks.service.StackService;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,12 +40,7 @@ public class StackController {
     }
 
     @GetMapping("")
-    public List<Stack> getAllStacks() {
+    public Iterable<String> getAllStacks() {
         return stackService.getAllStacks();
-    }
-
-    @GetMapping("/{stackName}/decks/count")
-    public int getStacksCount() {
-        return stackService.getAllStacks().size();
     }
 }

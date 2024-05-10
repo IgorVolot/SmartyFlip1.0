@@ -15,6 +15,9 @@ import smartyflip.decks.dto.DeckDto;
 import smartyflip.decks.dto.NewDeckDto;
 import smartyflip.decks.service.DeckService;
 import smartyflip.decks.service.TagService;
+import smartyflip.stacks.service.StackService;
+
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +25,8 @@ import smartyflip.decks.service.TagService;
 public class DeckController {
 
     final DeckService deckService;
+
+    final StackService stackService;
 
     final TagService tagService;
 
@@ -58,6 +63,11 @@ public class DeckController {
     @GetMapping("/name/{deckName}")
     public Iterable<DeckDto> findDecksByName(@PathVariable String deckName) {
         return deckService.findDecksByName(deckName);
+    }
+
+    @GetMapping("/tags")
+    public Iterable<DeckDto> finAllDecksByTags(@RequestBody Set<String> tags){
+        return deckService.finAllDecksByTags(tags);
     }
 
     @GetMapping("/stacks/{stackName}")

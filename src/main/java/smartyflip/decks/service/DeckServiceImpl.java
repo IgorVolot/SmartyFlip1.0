@@ -9,26 +9,22 @@
 package smartyflip.decks.service;
 
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smartyflip.cards.dao.CardRepository;
-import smartyflip.cards.model.Card;
-import smartyflip.decks.dao.TagRepository;
 import smartyflip.decks.dto.DatePeriodDto;
 import smartyflip.decks.dao.DeckRepository;
 import smartyflip.decks.dto.DeckDto;
 import smartyflip.decks.dto.NewDeckDto;
-import smartyflip.decks.dto.exceptions.DeckNotFoundException;
+import smartyflip.decks.model.TagToStringConverter;
+import smartyflip.decks.service.exceptions.DeckNotFoundException;
 import smartyflip.decks.model.Deck;
+import smartyflip.stacks.dao.StackRepository;
+import smartyflip.stacks.model.Stack;
 
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,20 +32,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DeckServiceImpl implements DeckService {
 
-    final DeckRepository deckRepository;
+    private final DeckRepository deckRepository;
 
-    final TagRepository tagRepository;
+    private final CardRepository cardRepository;
 
-    final CardRepository cardRepository;
+    private final StackRepository stackRepository;
 
-    final ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-//    public DeckServiceImpl(DeckRepository deckRepository, CardRepository cardRepository, ModelMapper modelMapper) {
-//        this.deckRepository = deckRepository;
-//        this.cardRepository = cardRepository;
-//        this.modelMapper = modelMapper;
-//        this.modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-//    }
 
     private Deck findDeckOrThrow(Integer moduleId) {
         return deckRepository.findById(moduleId).orElseThrow(DeckNotFoundException::new);
@@ -57,14 +47,30 @@ public class DeckServiceImpl implements DeckService {
 
     @Override
     public DeckDto addDeck(NewDeckDto newDeckDto) {
+        // Create a new Deck
         Deck deck = modelMapper.map(newDeckDto, Deck.class);
+
+        // Check if the Stack already exists
+        Stack stack = stackRepository.findByStackNameIgnoreCase(newDeckDto.getStackName());
+        if ( stack == null ) {
+            // If the Stack doesn't exist, create and save a new Stack
+            stack = new Stack();
+            stack.setStackName(newDeckDto.getStackName());
+            stack = stackRepository.save(stack);
+        }
+
+        // Update Deck's Stack
+        deck.setStack(stack);
+
+        // Save Deck in repository
         deck = deckRepository.save(deck);
+
         return modelMapper.map(deck, DeckDto.class);
     }
 
     @Override
-    public DeckDto findDeckById(Integer deckIdId) {
-        Deck deck = findDeckOrThrow(deckIdId);
+    public DeckDto findDeckById(Integer deckId) {
+        Deck deck = findDeckOrThrow(deckId);
         return modelMapper.map(deck, DeckDto.class);
     }
 
@@ -74,8 +80,6 @@ public class DeckServiceImpl implements DeckService {
         Deck deck = findDeckOrThrow(deckId);
         deck.setDeckName(newDeckDto.getDeckName());
         deck.setAuthorName(newDeckDto.getAuthorName());
-        deck.setStackName(newDeckDto.getStackName());
-//        deck.setTags(newDeckDto.getTags());
         deck = deckRepository.save(deck);
         return modelMapper.map(deck, DeckDto.class);
     }
@@ -100,8 +104,6 @@ public class DeckServiceImpl implements DeckService {
                 .map(deck -> modelMapper.map(deck, DeckDto.class))
                 .collect(Collectors.toList());
     }
-
-
 
     @Transactional(readOnly = true)
     @Override
@@ -134,27 +136,32 @@ public class DeckServiceImpl implements DeckService {
     @Override
     public Iterable<DeckDto> findDecksByStack(String stackName) {
         return deckRepository
-                .findAllByStackNameIgnoreCase(stackName)
-                .map(deck -> modelMapper.map(deck, DeckDto.class))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Iterable<DeckDto> findAllDecksByTag(String tag) {
-        return deckRepository.findDeckByTag(tag)
+                .findDecksByStackNameIgnoreCase(stackName)
                 .map(deck -> modelMapper.map(deck, DeckDto.class))
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     @Override
+    public Iterable<DeckDto> finAllDecksByTags(Set<String> tag) {
+        if ( tag == null || tag.isEmpty() ) {
+            return Collections.emptyList();
+        }
+
+        TagToStringConverter converter = new TagToStringConverter();
+        Set<String> convertedTags = tag.stream().map(converter::convertToDatabaseColumn).collect(Collectors.toSet());
+
+        return deckRepository
+                .findAllByTags(convertedTags)
+                .map(deck -> modelMapper.map(deck, DeckDto.class))
+                .collect(Collectors.toList());
+    }
+
+
+    @Transactional(readOnly = true)
+    @Override
     public int cardsAmountByDeckId(Integer deckId) {
         Deck deck = findDeckOrThrow(deckId);
         return deck.cardsAmount();
-    }
-
-    public void addCardToDeck(Deck deck, Card card) {
-        deck.addCard(card);
-        deckRepository.save(deck);
     }
 }

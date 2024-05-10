@@ -8,18 +8,17 @@
 
 package smartyflip.stacks.service;
 
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import smartyflip.decks.model.Deck;
 import smartyflip.stacks.dao.StackRepository;
 import smartyflip.stacks.dto.StackDto;
 import smartyflip.stacks.model.Stack;
-import smartyflip.stacks.service.exceptions.AlreadyExistException;
+import smartyflip.stacks.service.exceptions.StackAlreadyExistException;
 import smartyflip.stacks.service.exceptions.StackNotFoundException;
 
-import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class StackServiceImpl implements StackService {
@@ -28,18 +27,15 @@ public class StackServiceImpl implements StackService {
 
     final ModelMapper modelMapper;
 
-    private Set<Deck> decks;
-
-    public StackServiceImpl(StackRepository stackRepository, ModelMapper modelMapper, Set<Deck> decks) {
+    public StackServiceImpl(StackRepository stackRepository, ModelMapper modelMapper) {
         this.stackRepository = stackRepository;
         this.modelMapper = modelMapper;
-        this.decks = decks;
     }
 
     private Stack findStackOrThrow(String stackName) {
         Stack existingStack = stackRepository.findByStackNameIgnoreCase(stackName);
         if(existingStack == null) {
-            throw new StackNotFoundException("Stack with name " + stackName + " not found");
+            throw new StackNotFoundException();
         }
         return existingStack;
     }
@@ -53,7 +49,7 @@ public class StackServiceImpl implements StackService {
         Stack stackExists = stackRepository.findByStackNameIgnoreCase(stackDto.getStackName());
 
         if (stackExists != null) {
-            throw new AlreadyExistException("Stack already exists with this name.");
+            throw new StackAlreadyExistException("Stack already exists with this name.");
         }
         Stack stack = modelMapper.map(stackDto, Stack.class);
         stackRepository.save(stack);
@@ -93,21 +89,12 @@ public class StackServiceImpl implements StackService {
     }
 
     @Override
-    public List<Stack> getAllStacks() {
+    public Iterable<String> getAllStacks() {
         return stackRepository
                 .findAll()
-                .stream().toList();
+                .stream()
+                .map(Stack::getStackName)
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public int getStackDecksCount(String stackName) {
-        Stack stack = findStackOrThrow(stackName);
-        return stack.decksCount();
-    }
-
-
-    public void addDeckToStack(Stack stack, Deck deck) {
-        stack.addDeck(deck);
-        stackRepository.save(stack);
-    }
 }

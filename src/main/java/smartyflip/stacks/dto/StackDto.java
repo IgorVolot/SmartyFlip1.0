@@ -9,6 +9,7 @@
 package smartyflip.stacks.dto;
 
 import lombok.*;
+import smartyflip.decks.dto.DeckDto;
 import smartyflip.decks.model.Deck;
 
 import java.util.Set;
@@ -21,8 +22,5 @@ public class StackDto {
 
     String stackName;
 
-    Set<Deck> decks;
-
-    int decksCount;
-
+    Set<DeckDto> decks;
 }

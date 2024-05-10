@@ -6,11 +6,14 @@
  *
  */
 
-package smartyflip.decks.dto.exceptions;
+package smartyflip.stacks.service.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class DeckNotFoundException extends RuntimeException{
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+public class StackAlreadyExistException extends RuntimeException{
+    public StackAlreadyExistException(String message) {
+        super(message);
+    }
 }

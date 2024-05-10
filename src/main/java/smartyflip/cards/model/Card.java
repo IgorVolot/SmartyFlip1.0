@@ -37,36 +37,27 @@ public class Card {
 
     String level;
 
+    Integer deckId;
+
     String deckName;
 
-    String stackName;
 
     @ManyToOne
     @JoinColumn(name = "deck_deck_id")
     Deck deck;
 
-    @ManyToOne
-    @JoinColumn(name = "stack_stack_name")
-    Stack stack;
+//    @ManyToOne
+//    @JoinColumn(name = "stack_stack_id")
+//    Stack stack;
 
 
-    public Card(String question, String answer, String level, String deckName, String stackName) {
-        this.question = question;
-        this.answer = answer;
-        this.level = level;
-        this.deckName = deckName;
-        this.stackName = stackName;
-    }
+//    public Card(String question, String answer, String level) {
+//        this.question = question;
+//        this.answer = answer;
+//        this.level = level;
+//    }
 
     public void setDateCreated(LocalDateTime now) {
         this.dateCreated = LocalDateTime.from(now);
     }
-
-
-//    public void addLike() {
-//        if ( likes == null ) {
-//            likes = 0;
-//        }
-//        likes++;
-//    }
 }
