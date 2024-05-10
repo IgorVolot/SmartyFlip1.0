@@ -53,8 +53,8 @@ public class Deck {
         this.deckId = deckId;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "stack_stack_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stack_id")
     Stack stack;
 
 
@@ -62,4 +62,5 @@ public class Deck {
         cardsAmount = cards.size();
         return cardsAmount;
     }
+
 }

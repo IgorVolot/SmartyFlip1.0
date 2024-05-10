@@ -17,4 +17,6 @@ import java.util.stream.Stream;
 public interface CardRepository extends JpaRepository<Card, Integer> {
 
     Stream<Card> findAllCardsByDeckDeckId(Integer deckId);
+
+    Stream<Card> findCardsByDeckId(Integer deckId);
 }

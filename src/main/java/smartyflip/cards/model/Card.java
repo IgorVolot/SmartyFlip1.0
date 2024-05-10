@@ -11,7 +11,6 @@ package smartyflip.cards.model;
 import jakarta.persistence.*;
 import lombok.*;
 import smartyflip.decks.model.Deck;
-import smartyflip.stacks.model.Stack;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +21,7 @@ import java.time.LocalDateTime;
 @Setter
 @EqualsAndHashCode(of = "cardId")
 @Entity
-@Table(name = "cards")
+@Table(name = "card")
 public class Card {
 
     @Id
@@ -41,23 +40,7 @@ public class Card {
 
     String deckName;
 
-
     @ManyToOne
     @JoinColumn(name = "deck_deck_id")
     Deck deck;
-
-//    @ManyToOne
-//    @JoinColumn(name = "stack_stack_id")
-//    Stack stack;
-
-
-//    public Card(String question, String answer, String level) {
-//        this.question = question;
-//        this.answer = answer;
-//        this.level = level;
-//    }
-
-    public void setDateCreated(LocalDateTime now) {
-        this.dateCreated = LocalDateTime.from(now);
-    }
 }

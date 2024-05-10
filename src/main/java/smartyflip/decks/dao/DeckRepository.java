@@ -19,6 +19,8 @@ import java.time.LocalDate;
 
 public interface DeckRepository extends JpaRepository<Deck, Integer> {
 
+    Deck findByDeckId(Integer deckId);
+
     Stream<Deck> findAllByDateCreatedBetween(LocalDate dateFrom, LocalDate dateTo);
 
     Stream<Deck> findDecksByAuthorNameIgnoreCase(String authorName);

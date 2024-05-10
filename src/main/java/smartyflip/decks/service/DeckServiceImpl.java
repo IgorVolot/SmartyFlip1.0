@@ -80,8 +80,24 @@ public class DeckServiceImpl implements DeckService {
         Deck deck = findDeckOrThrow(deckId);
         deck.setDeckName(newDeckDto.getDeckName());
         deck.setAuthorName(newDeckDto.getAuthorName());
+        changeStackName(newDeckDto, deck);
+
+        deck.setTags(newDeckDto.getTags());
         deck = deckRepository.save(deck);
         return modelMapper.map(deck, DeckDto.class);
+    }
+
+    public void changeStackName (NewDeckDto newDeckDto, Deck deck) {
+        Stack newStack = stackRepository.findByStackNameIgnoreCase(newDeckDto.getStackName());
+        if (newStack == null) {
+            newStack = new Stack();
+            newStack.setStackName(newDeckDto.getStackName());
+            newStack.setStackName(newDeckDto.getStackName());
+        }
+        deck.setStack(newStack);
+
+        // Set the stackName of Deck.
+        deck.setStackName(newStack.getStackName());
     }
 
     @Transactional
@@ -157,11 +173,11 @@ public class DeckServiceImpl implements DeckService {
                 .collect(Collectors.toList());
     }
 
-
     @Transactional(readOnly = true)
     @Override
     public int cardsAmountByDeckId(Integer deckId) {
         Deck deck = findDeckOrThrow(deckId);
         return deck.cardsAmount();
     }
+
 }

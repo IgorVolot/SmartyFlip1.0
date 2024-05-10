@@ -26,8 +26,7 @@ public class Stack {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Integer stackId;
 
-    @Column(nullable = false)
-    @Setter
+    @Column
     String stackName;
 
     int decksAmount;

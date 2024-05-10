@@ -37,9 +37,5 @@ public class CardDto {
 
     String deckName;
 
-//    Integer stackId;
-//
-//    String stackName;
-
     LocalDateTime dateCreated;
 }

@@ -8,10 +8,9 @@
 
 package smartyflip.cards.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import smartyflip.cards.dao.CardRepository;
 import smartyflip.cards.dto.CardDto;
+import smartyflip.cards.dto.NewCardDto;
 import smartyflip.cards.service.exceptions.CardNotFoundException;
 import smartyflip.cards.model.Card;
 import lombok.RequiredArgsConstructor;
@@ -38,23 +37,23 @@ public class CardServiceImpl implements CardService {
 
 
     @Override
-    public Card addCard(CardDto cardDto) {
+    public CardDto addCard(NewCardDto newCardDto){
 
         // Validation for required fields
-        validateLength(cardDto.getQuestion(), "Question");
-        validateLength(cardDto.getAnswer(), "Answer");
-        validateLength(cardDto.getLevel(), "Level");
+        validateLength(newCardDto.getQuestion(), "Question");
+        validateLength(newCardDto.getAnswer(), "Answer");
+        validateLength(newCardDto.getLevel(), "Level");
 
         // Check for the Deck id
-        Deck deck = deckRepository.findById(cardDto.getDeckId())
-                .orElseThrow(DeckNotFoundException::new);
+        Deck deck = deckRepository.findById(newCardDto.getDeckId()).orElseThrow(DeckNotFoundException::new);
 
         // A new Card creation
-        Card newCard = modelMapper.map(cardDto, Card.class);
-        newCard.setDateCreated(LocalDateTime.now());
-        newCard.setDeck(deck);
-//        newCard.setDeckName(deck.getDeckName());
-        return cardRepository.save(newCard);
+        Card card = modelMapper.map(newCardDto, Card.class);
+        card.setDateCreated(LocalDateTime.now());
+        card.setDeckName(deck.getDeckName());
+        card.setDeck(deck);
+        cardRepository.save(card);
+        return mapToDto(card);
     }
 
 
@@ -64,9 +63,9 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardDto editCard(Integer cardId, CardDto cardDto) {
+    public CardDto editCard(Integer cardId, NewCardDto newCardDto) {
         Card card = getCardById(cardId);
-        updateCard(cardDto, card);
+        updateCard(newCardDto, card);
         cardRepository.save(card);
         return mapToDto(card);
     }
@@ -80,17 +79,13 @@ public class CardServiceImpl implements CardService {
 
     @Transactional(readOnly = true)
     @Override
-    public Iterable<CardDto> findCardsByDeckId(Integer deckId) {
+    public Iterable<CardDto> findCardsByDeckId(Integer deckId){
         if ( deckId == null ) {
             return Collections.emptyList();
         }
-        try {
-            return cardRepository.findAllCardsByDeckDeckId(deckId)
-                    .map(this::mapToDto).collect(Collectors.toList());
-        } catch (Exception e) {
-            //consider logging the error message for debugging
-            throw new RuntimeException("An error occurred while fetching Card Data using Deck ID", e);
-        }
+        return cardRepository.findCardsByDeckId(deckId)
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
 
@@ -110,27 +105,26 @@ public class CardServiceImpl implements CardService {
         }
     }
 
-    private void updateCard(CardDto cardDto, Card card) {
-        String question = cardDto.getQuestion();
+    private void updateCard(NewCardDto newCardDto, Card card) {
+        String question = newCardDto.getQuestion();
         if ( question != null ) {
             card.setQuestion(question);
         }
 
-        String answer = cardDto.getAnswer();
+        String answer = newCardDto.getAnswer();
         if ( answer != null ) {
             card.setAnswer(answer);
         }
 
-        String level = cardDto.getLevel();
+        String level = newCardDto.getLevel();
         if ( level != null ) {
             card.setLevel(level);
         }
 
-        String deckName = cardDto.getDeckName();
-        if ( deckName != null ) {
-            card.setDeckName(deckName);
-        }
-//        card.setDateCreated(LocalDateTime.now());
+        Integer deckId = newCardDto.getDeckId();
+        card.setDeckId(deckId);
+
+        card.setDateCreated(LocalDateTime.now());
     }
 
 }
