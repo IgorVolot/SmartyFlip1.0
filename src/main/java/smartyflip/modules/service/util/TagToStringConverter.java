@@ -6,9 +6,10 @@
  *
  */
 
-package smartyflip.modules.model;
+package smartyflip.modules.service.util;
 
 import org.modelmapper.AbstractConverter;
+import smartyflip.modules.model.Tag;
 
 public class TagToStringConverter extends AbstractConverter<Tag, String> {
     @Override

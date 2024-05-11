@@ -11,6 +11,7 @@ package smartyflip.modules.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smartyflip.card.dao.CardRepository;
@@ -19,11 +20,13 @@ import smartyflip.modules.dao.ModuleRepository;
 import smartyflip.modules.dto.ModuleDto;
 import smartyflip.modules.dto.NewModuleDto;
 import smartyflip.modules.model.Module;
-import smartyflip.modules.model.TagToStringConverter;
+import smartyflip.modules.service.util.TagToStringConverter;
 import smartyflip.modules.service.exceptions.ModuleNotFoundException;
+import smartyflip.modules.service.util.TrialModule;
 import smartyflip.stacks.dao.StackRepository;
 import smartyflip.stacks.model.Stack;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,6 +42,30 @@ public class ModuleServiceImpl implements ModuleService {
     private final StackRepository stackRepository;
 
     private final ModelMapper modelMapper;
+
+//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+//    public Module getModule(Long moduleId, String token) {
+//        if (!checkAccess(token)) {
+//            throw new SecurityException("Access Denied: Invalid or expired token.");
+//        }
+//
+//        Module module = moduleRepository.findById(moduleId).orElseThrow(() -> new IllegalArgumentException("Module not found"));
+//
+//        if (module instanceof TrialModule) {
+//            TrialModule trialModule = (TrialModule) module;
+//            if ( LocalDate.now().isAfter(trialModule.getTrialEndDate())) {
+//                throw new RuntimeException("Trial period has expired.");
+//            }
+//        }
+//
+//        return module;
+//    }
+//
+//    private boolean checkAccess(String token) {
+//        // Assume tokenService.decodeToken returns an object that includes user role
+//        DecodedTokenInfo tokenInfo = tokenService.decodeToken(token);
+//        return tokenInfo.isValid() && (tokenInfo.getRole().equals("REGISTERED") || (tokenInfo.getRole().equals("GUEST") && module instanceof TrialModule));
+//    }
 
 
     private Module findModuleOrThrow(Long moduleId) {
@@ -177,7 +204,7 @@ public class ModuleServiceImpl implements ModuleService {
     @Override
     public int cardsAmountByModuleId(Long moduleId) {
         Module module = findModuleOrThrow(moduleId);
-        return module.cardsAmount();
+        return module.getCardsAmount();
     }
 
 }

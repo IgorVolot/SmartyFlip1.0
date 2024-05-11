@@ -10,6 +10,7 @@ package smartyflip.card.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import smartyflip.card.model.enums.Level;
 import smartyflip.modules.model.Module;
 
 import java.time.LocalDateTime;
@@ -34,7 +35,8 @@ public class Card {
 
     LocalDateTime dateCreated;
 
-    String level;
+    @Enumerated(EnumType.STRING)
+    private Level level;
 
     Long moduleId;
 
