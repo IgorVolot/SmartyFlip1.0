@@ -9,9 +9,6 @@
 package smartyflip.stacks.service;
 
 import smartyflip.stacks.dto.StackDto;
-import smartyflip.stacks.model.Stack;
-
-import java.util.List;
 
 public interface StackService {
 

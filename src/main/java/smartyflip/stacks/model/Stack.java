@@ -10,7 +10,7 @@ package smartyflip.stacks.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import smartyflip.decks.model.Deck;
+import smartyflip.modules.model.Module;
 
 import java.util.Set;
 
@@ -24,22 +24,24 @@ import java.util.Set;
 public class Stack {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Integer stackId;
+    Long stackId;
 
     @Column
     String stackName;
 
-    int decksAmount;
+    int modulesAmount;
+
+    int trialModulesAmount;
 
     @OneToMany(mappedBy = "stack", cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<Deck> decks;
+    Set<Module> modules;
 
-    public Stack(String stackName, int decksAmount) {
+    public Stack(String stackName, int modulesAmount) {
         this.stackName = stackName;
-        this.decksAmount = decksAmount;
+        this.modulesAmount = modulesAmount;
     }
 
-    public int decksAmount() {
-        return decks.size();
+    public int modulesAmount() {
+        return modules.size();
     }
 }

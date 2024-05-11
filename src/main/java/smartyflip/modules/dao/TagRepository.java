@@ -6,12 +6,11 @@
  *
  */
 
-package smartyflip.stacks.dao;
-
+package smartyflip.modules.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import smartyflip.stacks.model.Stack;
+import smartyflip.modules.model.Tag;
 
-public interface StackRepository extends JpaRepository<Stack, Long> {
-    Stack findByStackNameIgnoreCase(String stackName);
+public interface TagRepository extends JpaRepository<Tag, Long> {
+
 }

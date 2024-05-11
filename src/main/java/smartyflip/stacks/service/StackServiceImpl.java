@@ -10,7 +10,7 @@ package smartyflip.stacks.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import smartyflip.decks.model.Deck;
+import smartyflip.modules.model.Module;
 import smartyflip.stacks.dao.StackRepository;
 import smartyflip.stacks.dto.StackDto;
 import smartyflip.stacks.model.Stack;
@@ -46,7 +46,9 @@ public class StackServiceImpl implements StackService {
             throw new IllegalArgumentException("StackDto cannot be null");
         }
 
-        Stack stackExists = stackRepository.findByStackNameIgnoreCase(stackDto.getStackName());
+        Stack stackExists = stackRepository
+                .findByStackNameIgnoreCase(stackDto.getStackName()
+                        .trim().toLowerCase().replaceAll("\\s+", "_"));
 
         if (stackExists != null) {
             throw new StackAlreadyExistException("Stack already exists with this name.");
@@ -74,15 +76,15 @@ public class StackServiceImpl implements StackService {
     public StackDto editStack(String stackName, StackDto stackDto) {
         Stack existingStack = findStackOrThrow(stackName);
         // Preserve the id of the existing entity
-        int existingId = existingStack.getStackId();
-        // Preserve the decks
-        Set<Deck> existingDecks = existingStack.getDecks();
+        long existingId = existingStack.getStackId();
+        // Preserve the modules
+        Set<Module> existingModules = existingStack.getModules();
         // Update the existingStack with StackDto's values
         modelMapper.map(stackDto, existingStack);
-        // Replace the existing stack id and decks
+        // Replace the existing stack id and modules
         existingStack.setStackId(existingId);
-        if (existingDecks != null) {
-            existingStack.setDecks(existingDecks);
+        if ( existingModules != null) {
+            existingStack.setModules(existingModules);
         }
         stackRepository.save(existingStack);
         return modelMapper.map(existingStack, StackDto.class);

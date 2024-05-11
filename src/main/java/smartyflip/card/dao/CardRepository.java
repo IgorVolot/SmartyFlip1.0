@@ -6,12 +6,14 @@
  *
  */
 
-package smartyflip.stacks.dao;
+package smartyflip.card.dao;
 
-
+import smartyflip.card.model.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
-import smartyflip.stacks.model.Stack;
 
-public interface StackRepository extends JpaRepository<Stack, Long> {
-    Stack findByStackNameIgnoreCase(String stackName);
+import java.util.stream.Stream;
+
+public interface CardRepository extends JpaRepository<Card, Long> {
+
+    Stream<Card> findCardsByModuleId(Long moduleId);
 }

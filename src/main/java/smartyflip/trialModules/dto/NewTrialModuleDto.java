@@ -6,20 +6,17 @@
  *
  */
 
-package smartyflip.stacks.dto;
+package smartyflip.trialModules.dto;
 
-import lombok.*;
-import smartyflip.modules.dto.ModuleDto;
+import lombok.Getter;
+import smartyflip.modules.model.Tag;
 
 import java.util.Set;
 
 @Getter
-@EqualsAndHashCode(of = "stackName")
-public class StackDto {
-
-    Long stackId;
-
+public class NewTrialModuleDto {
+    String trialModuleName;
+    String authorName;
     String stackName;
-
-    Set<ModuleDto> modules;
+    Set<Tag> tags;
 }

@@ -6,20 +6,18 @@
  *
  */
 
-package smartyflip.stacks.dto;
+package smartyflip.card.dto;
 
-import lombok.*;
-import smartyflip.modules.dto.ModuleDto;
-
-import java.util.Set;
+import lombok.Getter;
 
 @Getter
-@EqualsAndHashCode(of = "stackName")
-public class StackDto {
+public class NewCardDto {
 
-    Long stackId;
+    String question;
 
-    String stackName;
+    String answer;
 
-    Set<ModuleDto> modules;
+    String level;
+
+    Long moduleId;
 }

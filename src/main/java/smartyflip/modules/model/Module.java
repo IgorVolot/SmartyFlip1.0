@@ -1,0 +1,67 @@
+/*
+ *
+ *  *   *******************************************************************
+ *  *   *  Copyright (c) Author: Igor Volotovskyi ("Copyright "2024")2024.
+ *  *   *******************************************************************
+ *
+ */
+package smartyflip.modules.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import smartyflip.card.model.Card;
+import smartyflip.stacks.model.Stack;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode(of = "moduleId")
+@Entity
+@Table(name = "module")
+public class Module {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    Long moduleId;
+
+    @Column(name = "moduleName", nullable = false)
+    String moduleName;
+
+    String authorName;
+
+    LocalDate dateCreated = LocalDate.now();
+
+    String stackName;
+
+    int cardsAmount;
+
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "module_tag",
+            joinColumns = @JoinColumn(name = "module_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    private Set<Tag> tags = new HashSet<>();
+
+
+    @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
+    Set<Card> cards;
+
+//    public Module(Long moduleId) {
+//        this.moduleId = moduleId;
+//    }
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stack_id")
+    Stack stack;
+
+
+    public int cardsAmount() {
+        cardsAmount = cards.size();
+        return cardsAmount;
+    }
+
+}
