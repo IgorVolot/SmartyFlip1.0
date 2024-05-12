@@ -12,14 +12,13 @@ import smartyflip.modules.dto.DatePeriodDto;
 import smartyflip.modules.dto.ModuleDto;
 import smartyflip.modules.dto.NewModuleDto;
 
-import java.util.Set;
-
 public interface ModuleService {
-    ModuleDto addModule(NewModuleDto newModuleDto);
+    ModuleDto addModule(NewModuleDto newModuleDto, String subscriptionType);
 
     ModuleDto findModuleById(Long moduleId);
 
-    ModuleDto editModule(Long moduleId, NewModuleDto newModuleDto);
+    // FIXME
+//    ModuleDto editModule(NewModuleDto newModuleDto, Long moduleId,String subscriptionType);
 
     boolean deleteModule(Long moduleId);
 
@@ -33,7 +32,9 @@ public interface ModuleService {
 
     Iterable<ModuleDto> findModulesByStack(String stackName);
 
-    Iterable<ModuleDto> finAllModulesByTags(Set<String> tags);
+    // FIXME
+//    Iterable<ModuleDto> finAllModulesByTags(Set<String> tags);
 
     int cardsAmountByModuleId(Long moduleId);
 }
+

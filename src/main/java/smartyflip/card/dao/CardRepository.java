@@ -8,8 +8,8 @@
 
 package smartyflip.card.dao;
 
-import smartyflip.card.model.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
+import smartyflip.card.model.Card;
 
 import java.util.stream.Stream;
 

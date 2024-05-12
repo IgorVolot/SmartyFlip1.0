@@ -24,23 +24,44 @@ public class StackController {
         return stackService.addStack(stackDto);
     }
 
-    @GetMapping("/{stackName}")
-    public StackDto findStackByName(@PathVariable String stackName) {
-        return stackService.findStackByName(stackName);
+//    @GetMapping("/{stackName}")
+//    public StackDto findStackByName(@PathVariable String stackName) {
+//        return stackService.findStackByName(stackName);
+//    }
+
+    @GetMapping("/{stackId}")
+    public StackDto findStackById(@PathVariable("stackId") Long stackId) {
+        return stackService.findStackById(stackId);
     }
 
-    @PutMapping("/{stackName}")
-    public StackDto editStack(@PathVariable String stackName, @RequestBody StackDto stackDto) {
-        return stackService.editStack(stackName, stackDto);
+//    @PutMapping("/{stackName}")
+//    public StackDto editStack(@PathVariable String stackName, @RequestBody StackDto stackDto) {
+//        return stackService.editStack(stackName, stackDto);
+//    }
+
+    @PutMapping("/{stackId}")
+    public StackDto editStack(@PathVariable String stackId, @RequestBody StackDto stackDto) {
+        return stackService.editStack(Long.parseLong(stackId), stackDto);
     }
 
-    @DeleteMapping("/{stackName}")
-    public boolean removeStack(@PathVariable String stackName) {
-        return stackService.removeStack(stackName);
+//    @DeleteMapping("/{stackName}")
+//    public boolean removeStack(@PathVariable String stackName) {
+//        return stackService.removeStack(stackName);
+//    }
+
+    @DeleteMapping("/{stackId}")
+    public boolean removeStack(@PathVariable Long stackId) {
+        return stackService.removeStack(stackId);
     }
 
     @GetMapping("")
     public Iterable<String> getAllStacks() {
         return stackService.getAllStacks();
     }
+
+    @GetMapping("/{stackName}/modulesAmount")
+    public int getModulesAmount(@PathVariable String stackName) {
+        return stackService.getModulesAmount(stackName);
+    }
 }
+

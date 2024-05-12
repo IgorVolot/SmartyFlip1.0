@@ -8,7 +8,8 @@
 
 package smartyflip.stacks.dto;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import smartyflip.modules.dto.ModuleDto;
 
 import java.util.Set;

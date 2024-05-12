@@ -14,11 +14,19 @@ public interface StackService {
 
     StackDto addStack(StackDto stackDto);
 
-    boolean removeStack(String stackName);
+//    boolean removeStack(String stackName);
 
-    StackDto findStackByName(String stackName);
+    boolean removeStack(Long stackId);
 
-    StackDto editStack(String stackName, StackDto stackDto);
+//    StackDto findStackByName(String stackName);
+
+    StackDto findStackById(Long stackId);
+
+//    StackDto editStack(String stackName, StackDto stackDto);
+
+    StackDto editStack(Long stackId, StackDto stackDto);
 
     Iterable<String> getAllStacks();
+
+    int getModulesAmount(String stackName);
 }

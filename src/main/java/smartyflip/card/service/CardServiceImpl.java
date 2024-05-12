@@ -8,19 +8,19 @@
 
 package smartyflip.card.service;
 
-import smartyflip.card.dao.CardRepository;
-import smartyflip.card.dto.CardDto;
-import smartyflip.card.dto.NewCardDto;
-import smartyflip.card.service.exceptions.CardNotFoundException;
-import smartyflip.card.model.Card;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import smartyflip.card.dao.CardRepository;
+import smartyflip.card.dto.CardDto;
+import smartyflip.card.dto.NewCardDto;
+import smartyflip.card.model.Card;
+import smartyflip.card.model.enums.Level;
+import smartyflip.card.service.exceptions.CardNotFoundException;
 import smartyflip.modules.dao.ModuleRepository;
-import smartyflip.modules.service.exceptions.ModuleNotFoundException;
 import smartyflip.modules.model.Module;
-
+import smartyflip.modules.service.exceptions.ModuleNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -51,6 +51,7 @@ public class CardServiceImpl implements CardService {
 
         // A new Card creation
         Card card = modelMapper.map(newCardDto, Card.class);
+        card.setLevel(Level.fromString(newCardDto.getLevel()));
         card.setDateCreated(LocalDateTime.now());
         card.setModuleName(module.getModuleName().trim().toLowerCase().replaceAll("\\s+", "_"));
         card.setModule(module);
@@ -118,8 +119,9 @@ public class CardServiceImpl implements CardService {
             card.setAnswer(answer);
         }
 
-        String level = newCardDto.getLevel();
-        if ( level != null ) {
+        String levelStr = newCardDto.getLevel();
+        if ( levelStr != null ) {
+            Level level = Level.valueOf(levelStr.toUpperCase());
             card.setLevel(level);
         }
 

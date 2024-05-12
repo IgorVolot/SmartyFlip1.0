@@ -45,4 +45,13 @@ public class Card {
     @ManyToOne
     @JoinColumn(name = "module_module_id")
     Module module;
+
+    public long modulesAmount() {
+        if(module != null) {
+            return module.getCardsAmount();
+        } else {
+            // Default value
+            return 0;
+        }
+    }
 }

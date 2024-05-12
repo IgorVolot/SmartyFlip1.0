@@ -13,4 +13,5 @@ import smartyflip.modules.model.Tag;
 
 public interface TagRepository extends JpaRepository<Tag, Long> {
 
+    Tag findByTagNameIgnoreCase(String tagName);
 }

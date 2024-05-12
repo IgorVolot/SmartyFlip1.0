@@ -16,9 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import smartyflip.modules.model.Module;
 
-import java.time.LocalDate;
-
-@Setter
+@Setter // FIXME @Setter set for the testing purpose
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -26,17 +24,16 @@ import java.time.LocalDate;
 @DiscriminatorValue("REGISTERED")
 public class RegisteredModule extends Module {
 
-    @Getter
     private String subscriptionType;    // Type of subscription
 
     // RESERVED OPTIONS
-    @Getter
-    private LocalDate accessEndDate;    // Date when the access ends
-
-    private boolean hasAdditionalContent;  // Indicates if additional features/content are available
-
-    public boolean hasAdditionalContent() {
-        return hasAdditionalContent;
-    }
+//    @Getter
+//    private LocalDate accessEndDate;    // Date when the access ends
+//
+//    private boolean hasAdditionalContent;  // Indicates if additional features/content are available
+//
+//    public boolean hasAdditionalContent() {
+//        return hasAdditionalContent;
+//    }
 
 }

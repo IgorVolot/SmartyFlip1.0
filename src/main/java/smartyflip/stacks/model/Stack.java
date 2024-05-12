@@ -41,7 +41,7 @@ public class Stack {
         this.modulesAmount = modulesAmount;
     }
 
-    public int modulesAmount() {
-        return modules.size();
+    public int getModulesAmount() {
+        return modules != null ? modules.size() : 0;
     }
 }

@@ -22,10 +22,11 @@ public class TagController {
 
     final TagService tagService;
 
-    @PatchMapping("/{tagName}")
-    public Iterable<String> addTagToModule(@PathVariable Long moduleId, @PathVariable String tagName) {
-        return tagService.addTagToModule(moduleId, tagName);
-    }
+    // FIXME
+//    @PatchMapping("/{tagName}")
+//    public Iterable<String> addTagToModule(@PathVariable Long moduleId, @PathVariable String tagName) {
+//        return tagService.addTagToModule(moduleId, tagName);
+//    }
 
 
     @DeleteMapping("/{tag}")

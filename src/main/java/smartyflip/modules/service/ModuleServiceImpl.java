@@ -11,24 +11,22 @@ package smartyflip.modules.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smartyflip.card.dao.CardRepository;
-import smartyflip.modules.dto.DatePeriodDto;
 import smartyflip.modules.dao.ModuleRepository;
+import smartyflip.modules.dao.TagRepository;
+import smartyflip.modules.dto.DatePeriodDto;
 import smartyflip.modules.dto.ModuleDto;
 import smartyflip.modules.dto.NewModuleDto;
 import smartyflip.modules.model.Module;
-import smartyflip.modules.service.util.TagToStringConverter;
 import smartyflip.modules.service.exceptions.ModuleNotFoundException;
+import smartyflip.modules.service.util.RegisteredModule;
 import smartyflip.modules.service.util.TrialModule;
 import smartyflip.stacks.dao.StackRepository;
 import smartyflip.stacks.model.Stack;
 
-import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +39,11 @@ public class ModuleServiceImpl implements ModuleService {
 
     private final StackRepository stackRepository;
 
+    private final TagRepository tagRepository;
+
     private final ModelMapper modelMapper;
+
+    // TO REVISE
 
 //    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 //    public Module getModule(Long moduleId, String token) {
@@ -74,16 +76,27 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Transactional
     @Override
-    public ModuleDto addModule(NewModuleDto newModuleDto) {
+    public ModuleDto addModule(NewModuleDto newModuleDto, String subscriptionType) {
         // Create a new Module
-        Module module = modelMapper.map(newModuleDto, Module.class);
+//        Module module = modelMapper.map(newModuleDto, Module.class);
+
+        Module module;
+        if ( "GUEST".equalsIgnoreCase(subscriptionType) ) {
+            module = modelMapper.map(newModuleDto, TrialModule.class);
+            ((TrialModule) module).setSubscriptionType("GUEST");
+        } else if ( "USER".equalsIgnoreCase(subscriptionType) ) {
+            module = modelMapper.map(newModuleDto, RegisteredModule.class);
+            ((RegisteredModule) module).setSubscriptionType("USER");
+        } else {
+            throw new IllegalArgumentException("Invalid subscription type.");
+        }
 
         // Check if the Stack already exists
         Stack stack = stackRepository.findByStackNameIgnoreCase(newModuleDto.getStackName());
         if ( stack == null ) {
             // If the Stack doesn't exist, create and save a new Stack
             stack = new Stack();
-            stack.setStackName(newModuleDto.getStackName().trim().toLowerCase().replaceAll("\\s+", "_"));
+            stack.setStackName(newModuleDto.getStackName().trim().toUpperCase().replaceAll("\\s+", "_"));
             stack = stackRepository.save(stack);
         }
 
@@ -102,24 +115,34 @@ public class ModuleServiceImpl implements ModuleService {
         return modelMapper.map(module, ModuleDto.class);
     }
 
-    @Transactional
-    @Override
-    public ModuleDto editModule(Long moduleId, NewModuleDto newModuleDto) {
-        Module module = findModuleOrThrow(moduleId);
-        module.setModuleName(newModuleDto.getModuleName().trim().toLowerCase().replaceAll("\\s+", "_"));
-        module.setAuthorName(newModuleDto.getAuthorName().trim().toLowerCase().replaceAll("\\s+", "_"));
-        changeStackName(newModuleDto, module);
+//    @Transactional
+//    @Override
+//    public ModuleDto editModule(NewModuleDto newModuleDto, Long moduleId, String subscriptionType) {
+//        Module module = findModuleOrThrow(moduleId);
+//        module.setModuleName(newModuleDto.getModuleName().trim().toLowerCase().replaceAll("\\s+", "_"));
+//        module.setAuthorName(newModuleDto.getAuthorName().trim().toLowerCase().replaceAll("\\s+", "_"));
+//        changeStackName(newModuleDto, module);
+//
+//        if ( module instanceof TrialModule && "USER".equalsIgnoreCase(subscriptionType) ) {
+//            module = modelMapper.map(newModuleDto, RegisteredModule.class);
+//            ((RegisteredModule) module).setSubscriptionType("USER");
+//        } else if ( module instanceof RegisteredModule && "GUEST".equalsIgnoreCase(subscriptionType) ) {
+//            module = modelMapper.map(newModuleDto, TrialModule.class);
+//            ((TrialModule) module).setSubscriptionType("GUEST");
+//        } else {
+//            throw new IllegalArgumentException("Invalid subscription type.");
+//        }
+//
+//        module = moduleRepository.save(module);
+//
+//        return modelMapper.map(module, ModuleDto.class);
+//    }
 
-        module = moduleRepository.save(module);
-        return modelMapper.map(module, ModuleDto.class);
-    }
-
-    public void changeStackName (NewModuleDto newModuleDto, Module module) {
+    public void changeStackName(NewModuleDto newModuleDto, Module module) {
         Stack newStack = stackRepository.findByStackNameIgnoreCase(newModuleDto.getStackName());
-        if (newStack == null) {
+        if ( newStack == null ) {
             newStack = new Stack();
             newStack.setStackName(newModuleDto.getStackName().trim().toLowerCase().replaceAll("\\s+", "_"));
-//            newStack.setStackName(newModuleDto.getStackName());
         }
         module.setStack(newStack);
 
@@ -184,27 +207,28 @@ public class ModuleServiceImpl implements ModuleService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Iterable<ModuleDto> finAllModulesByTags(Set<String> tag) {
-        if ( tag == null || tag.isEmpty() ) {
-            return Collections.emptyList();
-        }
-
-        TagToStringConverter converter = new TagToStringConverter();
-        Set<String> convertedTags = tag.stream().map(converter::convertToDatabaseColumn).collect(Collectors.toSet());
-
-        return moduleRepository
-                .findAllByTags(convertedTags)
-                .map(module -> modelMapper.map(module, ModuleDto.class))
-                .collect(Collectors.toList());
-    }
+    // FIXME
+//    @Transactional(readOnly = true)
+//    @Override
+//    public Iterable<ModuleDto> finAllModulesByTags(Set<String> tag) {
+//        if ( tag == null || tag.isEmpty() ) {
+//            return Collections.emptyList();
+//        }
+//
+//        TagToStringConverter converter = new TagToStringConverter();
+//        Set<String> convertedTags = tag.stream().map(converter::convertToDatabaseColumn).collect(Collectors.toSet());
+//
+//        return moduleRepository
+//                .findAllByTags(convertedTags)
+//                .map(module -> modelMapper.map(module, ModuleDto.class))
+//                .collect(Collectors.toList());
+//    }
 
     @Transactional(readOnly = true)
     @Override
     public int cardsAmountByModuleId(Long moduleId) {
         Module module = findModuleOrThrow(moduleId);
-        return module.getCardsAmount();
+        return (module.getCards() != null) ? module.getCardsAmount() : 0;
     }
 
 }

@@ -17,8 +17,6 @@ import smartyflip.modules.service.ModuleService;
 import smartyflip.modules.service.TagService;
 import smartyflip.stacks.service.StackService;
 
-import java.util.Set;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/modules")
@@ -30,9 +28,9 @@ public class ModuleController {
 
     final TagService tagService;
 
-    @PostMapping
-    public ModuleDto addModule(@RequestBody NewModuleDto newModuleDto) {
-        return moduleService.addModule(newModuleDto);
+    @PostMapping("/{userType}")
+    public ModuleDto addModule(@RequestBody NewModuleDto newModuleDto, @PathVariable String userType) {
+        return moduleService.addModule(newModuleDto, userType);
     }
 
     @GetMapping("/{moduleId}")
@@ -40,10 +38,11 @@ public class ModuleController {
         return moduleService.findModuleById(moduleId);
     }
 
-    @PutMapping("/{moduleId}")
-    public ModuleDto editModule(@PathVariable Long moduleId, @RequestBody NewModuleDto newModuleDto) {
-        return moduleService.editModule(moduleId, newModuleDto);
-    }
+    // FIXME
+//    @PutMapping("/{moduleId}/user/{userType}")
+//    public ModuleDto editModule(@RequestBody NewModuleDto newModuleDto, @PathVariable Long moduleId, @PathVariable String userType) {
+//        return moduleService.editModule(newModuleDto, moduleId, userType);
+//    }
 
     @DeleteMapping("/{moduleId}")
     public boolean deleteModule(@PathVariable Long moduleId) {
@@ -65,10 +64,11 @@ public class ModuleController {
         return moduleService.findModulesByName(moduleName);
     }
 
-    @GetMapping("/tags")
-    public Iterable<ModuleDto> finAllModulesByTags(@RequestBody Set<String> tags){
-        return moduleService.finAllModulesByTags(tags);
-    }
+    // FIXME
+//    @GetMapping("/tags")
+//    public Iterable<ModuleDto> finAllModulesByTags(@RequestBody Set<String> tags){
+//        return moduleService.finAllModulesByTags(tags);
+//    }
 
     @GetMapping("/stacks/{stackName}")
     public Iterable<ModuleDto> findModulesByStack(@PathVariable String stackName) {
@@ -78,6 +78,11 @@ public class ModuleController {
     @GetMapping
     public Iterable<ModuleDto> findAllModules() {
         return moduleService.findAllModules();
+    }
+
+    @GetMapping("/tags")
+    public Iterable<String> findAllTags() {
+        return tagService.findAllTags();
     }
 
     @GetMapping("/{moduleId}/cards/amount")

@@ -25,7 +25,7 @@ import java.util.Set;
 @Table(name = "module")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
-public abstract class Module {
+public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long moduleId;
@@ -56,6 +56,9 @@ public abstract class Module {
 
     // Utility method to compute the amount of cards
     public int getCardsAmount() {
+        if ( cards == null ) {
+            return 0;
+        }
         return cards.size();
     }
 

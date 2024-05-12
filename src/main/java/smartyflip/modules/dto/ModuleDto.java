@@ -8,7 +8,9 @@
 
 package smartyflip.modules.dto;
 
-import jakarta.persistence.*;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 import smartyflip.card.dto.CardDto;
 
