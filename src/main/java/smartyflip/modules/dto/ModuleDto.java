@@ -15,6 +15,7 @@ import lombok.*;
 import smartyflip.card.dto.CardDto;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -28,17 +29,18 @@ public class ModuleDto {
 
     String moduleName;
 
-    String authorName;
+    String userName;
 
     LocalDate dateCreated;
 
     String stackName;
 
-    @Singular
-    Set<String> tags;
+    @Builder.Default
+    Set<String> tags = new HashSet<>();
 
-    Set<CardDto> cards;
+    @Builder.Default
+    Set<CardDto> cards = new HashSet<>();
 
-    int cardsAmount;
+//    int cardsAmount;
 
 }

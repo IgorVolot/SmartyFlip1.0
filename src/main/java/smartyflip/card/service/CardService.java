@@ -8,8 +8,10 @@
 
 package smartyflip.card.service;
 
+import org.springframework.data.domain.PageRequest;
 import smartyflip.card.dto.CardDto;
 import smartyflip.card.dto.NewCardDto;
+import smartyflip.utils.PagedDataResponseDto;
 
 public interface CardService {
 
@@ -22,4 +24,6 @@ public interface CardService {
     CardDto deleteCard(Long cardId);
 
     Iterable<CardDto> findCardsByModuleId(Long moduleId);
+
+    PagedDataResponseDto<CardDto> findAllCards(PageRequest pageRequest);
 }

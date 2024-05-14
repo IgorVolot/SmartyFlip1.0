@@ -8,9 +8,11 @@
 
 package smartyflip.modules.service;
 
+import org.springframework.data.domain.PageRequest;
 import smartyflip.modules.dto.DatePeriodDto;
 import smartyflip.modules.dto.ModuleDto;
 import smartyflip.modules.dto.NewModuleDto;
+import smartyflip.utils.PagedDataResponseDto;
 
 public interface ModuleService {
     ModuleDto addModule(NewModuleDto newModuleDto, String subscriptionType);
@@ -18,23 +20,22 @@ public interface ModuleService {
     ModuleDto findModuleById(Long moduleId);
 
     // FIXME
-//    ModuleDto editModule(NewModuleDto newModuleDto, Long moduleId,String subscriptionType);
+    ModuleDto editModule(NewModuleDto newModuleDto, Long moduleId, String subscriptionType);
 
     boolean deleteModule(Long moduleId);
 
-    Iterable<ModuleDto> findModulesByAuthor(String authorName);
+    Iterable<ModuleDto> findModulesByUserName(String userName);
 
     Iterable<ModuleDto> findModulesByPeriod(DatePeriodDto datePeriodDto);
 
     Iterable<ModuleDto> findModulesByName(String moduleName);
 
-    Iterable<ModuleDto> findAllModules();
+    PagedDataResponseDto<ModuleDto> findAllModules(PageRequest pageRequest);
 
     Iterable<ModuleDto> findModulesByStack(String stackName);
 
     // FIXME
-//    Iterable<ModuleDto> finAllModulesByTags(Set<String> tags);
+//    Iterable<ModuleDto> finAllModulesByTags(Iterable<String> tags);
 
     int cardsAmountByModuleId(Long moduleId);
 }
-

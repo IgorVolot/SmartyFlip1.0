@@ -24,30 +24,16 @@ public class StackController {
         return stackService.addStack(stackDto);
     }
 
-//    @GetMapping("/{stackName}")
-//    public StackDto findStackByName(@PathVariable String stackName) {
-//        return stackService.findStackByName(stackName);
-//    }
 
     @GetMapping("/{stackId}")
     public StackDto findStackById(@PathVariable("stackId") Long stackId) {
         return stackService.findStackById(stackId);
     }
 
-//    @PutMapping("/{stackName}")
-//    public StackDto editStack(@PathVariable String stackName, @RequestBody StackDto stackDto) {
-//        return stackService.editStack(stackName, stackDto);
-//    }
-
     @PutMapping("/{stackId}")
     public StackDto editStack(@PathVariable String stackId, @RequestBody StackDto stackDto) {
         return stackService.editStack(Long.parseLong(stackId), stackDto);
     }
-
-//    @DeleteMapping("/{stackName}")
-//    public boolean removeStack(@PathVariable String stackName) {
-//        return stackService.removeStack(stackName);
-//    }
 
     @DeleteMapping("/{stackId}")
     public boolean removeStack(@PathVariable Long stackId) {
@@ -64,4 +50,3 @@ public class StackController {
         return stackService.getModulesAmount(stackName);
     }
 }
-

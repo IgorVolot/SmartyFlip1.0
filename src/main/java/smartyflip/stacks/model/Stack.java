@@ -10,8 +10,10 @@ package smartyflip.stacks.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import smartyflip.modules.model.Module;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -24,24 +26,24 @@ import java.util.Set;
 public class Stack {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long stackId;
+    @Column(name = "stack_id")
+    private Long stackId;
 
-    @Column
-    String stackName;
+    @Column(name = "stackName", nullable = false, unique = true)
+    private String stackName;
 
-    int modulesAmount;
-
-    int trialModulesAmount;
+    @Formula("(SELECT COUNT(m.module_id) FROM module m WHERE m.stack_id = stack_id)")
+    private int modulesAmount;
 
     @OneToMany(mappedBy = "stack", cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<Module> modules;
+    private Set<Module> modules = new HashSet<>();
 
     public Stack(String stackName, int modulesAmount) {
         this.stackName = stackName;
         this.modulesAmount = modulesAmount;
     }
 
-    public int getModulesAmount() {
-        return modules != null ? modules.size() : 0;
-    }
+//    public int getModulesAmount() {
+//        return modules != null ? modules.size() : 0;
+//    }
 }

@@ -10,6 +10,8 @@ package smartyflip.card.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import smartyflip.card.dao.CardRepository;
@@ -18,11 +20,15 @@ import smartyflip.card.dto.NewCardDto;
 import smartyflip.card.model.Card;
 import smartyflip.card.model.enums.Level;
 import smartyflip.card.service.exceptions.CardNotFoundException;
+import smartyflip.card.service.exceptions.PayloadRequiredException;
+import smartyflip.card.service.exceptions.PayloadTooLargeException;
 import smartyflip.modules.dao.ModuleRepository;
 import smartyflip.modules.model.Module;
 import smartyflip.modules.service.exceptions.ModuleNotFoundException;
+import smartyflip.utils.PagedDataResponseDto;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,7 +36,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
-
     private final CardRepository cardRepository;
 
     private final ModuleRepository moduleRepository;
@@ -39,8 +44,7 @@ public class CardServiceImpl implements CardService {
 
 
     @Override
-    public CardDto addCard(NewCardDto newCardDto){
-
+    public CardDto addCard(NewCardDto newCardDto) {
         // Validation for required fields
         validateLength(newCardDto.getQuestion(), "Question");
         validateLength(newCardDto.getAnswer(), "Answer");
@@ -55,6 +59,9 @@ public class CardServiceImpl implements CardService {
         card.setDateCreated(LocalDateTime.now());
         card.setModuleName(module.getModuleName().trim().toLowerCase().replaceAll("\\s+", "_"));
         card.setModule(module);
+        int cardCount = module.getCardsAmount() + 1;
+        module.setCardsAmount(cardCount);
+        moduleRepository.save(module);
         cardRepository.save(card);
         return mapToDto(card);
     }
@@ -75,14 +82,16 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto deleteCard(Long cardId) {
+        Module module = moduleRepository.findById(cardId).orElseThrow(ModuleNotFoundException::new);
         Card card = getCardById(cardId);
+        module.setCardsAmount(module.getCardsAmount() - 1);
         cardRepository.deleteById(cardId);
         return mapToDto(card);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Iterable<CardDto> findCardsByModuleId(Long moduleId){
+    public Iterable<CardDto> findCardsByModuleId(Long moduleId) {
         if ( moduleId == null ) {
             return Collections.emptyList();
         }
@@ -91,9 +100,22 @@ public class CardServiceImpl implements CardService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public PagedDataResponseDto<CardDto> findAllCards(PageRequest pageRequest) {
+        Page<Card> cardPage = cardRepository.findAll(pageRequest);
+        PagedDataResponseDto<CardDto> pagedDataResponseDto = new PagedDataResponseDto<>();
+        pagedDataResponseDto.setData(cardPage.getContent().stream()
+                .map((Card card) -> modelMapper.map(card, CardDto.class))
+                .collect(Collectors.toList()));
+        pagedDataResponseDto.setTotalElements(cardPage.getTotalElements());
+        pagedDataResponseDto.setTotalPages(cardPage.getTotalPages());
+        return pagedDataResponseDto;
+    }
+
 
     private Card getCardById(Long cardId) {
-        return cardRepository.findById(cardId).orElseThrow(() -> new CardNotFoundException("Card with id " + cardId + " not found"));
+        return cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
     }
 
 
@@ -103,21 +125,23 @@ public class CardServiceImpl implements CardService {
 
 
     private void validateLength(String str, String fieldName) {
-        if ( str != null && str.length() > 1500 ) {
-            throw new IllegalArgumentException(fieldName + " exceeds the maximum length");
+
+        if ( str.isEmpty() ) {
+            throw new PayloadRequiredException();
+        }
+        if ( str.length() > 2500 ) {
+            throw new PayloadTooLargeException();
         }
     }
 
     private void updateCard(NewCardDto newCardDto, Card card) {
         String question = newCardDto.getQuestion();
-        if ( question != null ) {
-            card.setQuestion(question);
-        }
+        validateLength(question, "Question");
+        card.setQuestion(question);
 
         String answer = newCardDto.getAnswer();
-        if ( answer != null ) {
-            card.setAnswer(answer);
-        }
+        validateLength(answer, "Answer");
+        card.setAnswer(answer);
 
         String levelStr = newCardDto.getLevel();
         if ( levelStr != null ) {
@@ -133,8 +157,6 @@ public class CardServiceImpl implements CardService {
             String moduleName = moduleOpt.get().getModuleName().trim().toLowerCase().replaceAll("\\s+", "_");
             card.setModuleName(moduleName);
         }
-
-        card.setDateCreated(LocalDateTime.now());
     }
 
 }

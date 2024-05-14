@@ -11,12 +11,13 @@ package smartyflip.modules.service;
 
 public interface TagService {
 
-    // FIXME
-//    Iterable<String> addTagToModule(Long moduleId, String tagName);
+    Iterable<String> addTagsToModule(Long moduleId, Iterable<String> tags);
 
     boolean deleteTag(Long moduleId, String tag);
 
     Iterable<String> findTagsByModuleId(Long moduleId);
 
     Iterable<String> findAllTags();
+
+    boolean deleteTag(long tagId);
 }

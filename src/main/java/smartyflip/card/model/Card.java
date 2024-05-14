@@ -14,6 +14,7 @@ import smartyflip.card.model.enums.Level;
 import smartyflip.modules.model.Module;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 
 @AllArgsConstructor
@@ -27,31 +28,38 @@ public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long cardId;
+    @Column(name = "cardId")
+    private Long cardId;
 
-    String question;
+    @Column(name = "question", nullable = false, length = 500)
+    private String question;
 
-    String answer;
-
-    LocalDateTime dateCreated;
+    @Column(name = "answer", nullable = false, length = 2500)
+    private String answer;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "level", nullable = false)
     private Level level;
 
-    Long moduleId;
+    @Column(name = "created", nullable = false, updatable = false)
+    private LocalDateTime dateCreated = LocalDateTime.now();
 
-    String moduleName;
+    @Column(name = "moduleId", nullable = false)
+    private Long moduleId;
+
+    @Column(name = "moduleName")
+    private String moduleName;
 
     @ManyToOne
     @JoinColumn(name = "module_module_id")
     Module module;
 
-    public long modulesAmount() {
-        if(module != null) {
-            return module.getCardsAmount();
-        } else {
-            // Default value
-            return 0;
-        }
-    }
+//    public long modulesAmount() {
+//        if(module != null) {
+//            return module.getCardsAmount();
+//        } else {
+//            // Default value
+//            return 0;
+//        }
+//    }
 }

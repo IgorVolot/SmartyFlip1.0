@@ -9,6 +9,7 @@
 package smartyflip.modules.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import smartyflip.modules.dto.DatePeriodDto;
 import smartyflip.modules.dto.ModuleDto;
@@ -16,6 +17,7 @@ import smartyflip.modules.dto.NewModuleDto;
 import smartyflip.modules.service.ModuleService;
 import smartyflip.modules.service.TagService;
 import smartyflip.stacks.service.StackService;
+import smartyflip.utils.PagedDataResponseDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,19 +41,19 @@ public class ModuleController {
     }
 
     // FIXME
-//    @PutMapping("/{moduleId}/user/{userType}")
-//    public ModuleDto editModule(@RequestBody NewModuleDto newModuleDto, @PathVariable Long moduleId, @PathVariable String userType) {
-//        return moduleService.editModule(newModuleDto, moduleId, userType);
-//    }
+    @PutMapping("/{moduleId}/user/{userType}")
+    public ModuleDto editModule(@RequestBody NewModuleDto newModuleDto, @PathVariable Long moduleId, @PathVariable String userType) {
+        return moduleService.editModule(newModuleDto, moduleId, userType);
+    }
 
     @DeleteMapping("/{moduleId}")
     public boolean deleteModule(@PathVariable Long moduleId) {
         return moduleService.deleteModule(moduleId);
     }
 
-    @GetMapping("/author/{user}")
-    public Iterable<ModuleDto> findModulesByAuthor(@PathVariable String user) {
-        return moduleService.findModulesByAuthor(user);
+    @GetMapping("/user/{userName}")
+    public Iterable<ModuleDto> findModulesByUserName(@PathVariable String userName) {
+        return moduleService.findModulesByUserName(userName);
     }
 
     @PostMapping("/period")
@@ -66,8 +68,8 @@ public class ModuleController {
 
     // FIXME
 //    @GetMapping("/tags")
-//    public Iterable<ModuleDto> finAllModulesByTags(@RequestBody Set<String> tags){
-//        return moduleService.finAllModulesByTags(tags);
+//    public Iterable<ModuleDto> findAllModulesByTags(@RequestBody Iterable<String> tagNames) {
+//        return moduleService.finAllModulesByTags(tagNames);
 //    }
 
     @GetMapping("/stacks/{stackName}")
@@ -76,8 +78,11 @@ public class ModuleController {
     }
 
     @GetMapping
-    public Iterable<ModuleDto> findAllModules() {
-        return moduleService.findAllModules();
+    public PagedDataResponseDto<ModuleDto> findAllModules(
+            @RequestParam(required = false, defaultValue = "6", name = "size") Integer size,
+            @RequestParam(required = false, defaultValue = "0", name = "page") Integer page
+    ) {
+        return moduleService.findAllModules(PageRequest.of(page, size));
     }
 
     @GetMapping("/tags")
