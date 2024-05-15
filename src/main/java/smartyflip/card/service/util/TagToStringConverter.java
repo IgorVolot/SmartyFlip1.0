@@ -6,7 +6,7 @@
  *
  */
 
-package smartyflip.modules.service.util;
+package smartyflip.card.service.util;
 
 import org.modelmapper.AbstractConverter;
 import smartyflip.modules.model.Tag;

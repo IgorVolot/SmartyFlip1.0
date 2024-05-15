@@ -15,7 +15,7 @@ import smartyflip.modules.dto.DatePeriodDto;
 import smartyflip.modules.dto.ModuleDto;
 import smartyflip.modules.dto.NewModuleDto;
 import smartyflip.modules.service.ModuleService;
-import smartyflip.modules.service.TagService;
+import smartyflip.card.service.TagService;
 import smartyflip.stacks.service.StackService;
 import smartyflip.utils.PagedDataResponseDto;
 

@@ -6,10 +6,10 @@
  *
  */
 
-package smartyflip.card.service;
+    package smartyflip.card.service;
 
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,25 +22,31 @@ import smartyflip.card.model.enums.Level;
 import smartyflip.card.service.exceptions.CardNotFoundException;
 import smartyflip.card.service.exceptions.PayloadRequiredException;
 import smartyflip.card.service.exceptions.PayloadTooLargeException;
+import smartyflip.card.service.logging.CardLogger;
 import smartyflip.modules.dao.ModuleRepository;
 import smartyflip.modules.model.Module;
 import smartyflip.modules.service.exceptions.ModuleNotFoundException;
 import smartyflip.utils.PagedDataResponseDto;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class CardServiceImpl implements CardService {
-    private final CardRepository cardRepository;
+    @Autowired
+    private CardRepository cardRepository;
+    @Autowired
+    private ModuleRepository moduleRepository;
 
-    private final ModuleRepository moduleRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
-    private final ModelMapper modelMapper;
+    private Card findCardOrThrow(String id) {
+        return cardRepository.findById(id).orElseThrow(CardNotFoundException::new);
+    }
 
 
     @Override
@@ -68,12 +74,12 @@ public class CardServiceImpl implements CardService {
 
 
     @Override
-    public CardDto findCardById(Long cardId) {
+    public CardDto findCardById(String cardId) {
         return mapToDto(getCardById(cardId));
     }
 
     @Override
-    public CardDto editCard(Long cardId, NewCardDto newCardDto) {
+    public CardDto editCard(String cardId, NewCardDto newCardDto) {
         Card card = getCardById(cardId);
         updateCard(newCardDto, card);
         cardRepository.save(card);
@@ -81,12 +87,14 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
-    public CardDto deleteCard(Long cardId) {
-        Module module = moduleRepository.findById(cardId).orElseThrow(ModuleNotFoundException::new);
-        Card card = getCardById(cardId);
-        module.setCardsAmount(module.getCardsAmount() - 1);
+    public boolean deleteCard(String cardId) {
+        Card card = card = getCardById(cardId);
+        if ( card == null || card.getId().isEmpty() ) {
+            return false;
+        }
+        Module module = moduleRepository.findById(card.getModuleId()).orElseThrow(ModuleNotFoundException::new);
         cardRepository.deleteById(cardId);
-        return mapToDto(card);
+        return true;
     }
 
     @Transactional(readOnly = true)
@@ -113,8 +121,37 @@ public class CardServiceImpl implements CardService {
         return pagedDataResponseDto;
     }
 
+    @CardLogger
+    @Override
+    public void addLike(String id) {
+        Card card = findCardOrThrow(id);
+        card.addLike();
+        cardRepository.save(card);
+    }
 
-    private Card getCardById(Long cardId) {
+    @CardLogger
+    @Override
+    public void addDislike(String id) {
+        Card card = findCardOrThrow(id);
+        card.addDislike();
+        cardRepository.save(card);
+    }
+
+
+    @Override
+    public Iterable<CardDto> findCardByTags(Set<String> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return cardRepository
+                .findAllByTagsInIgnoreCase(tags)
+                .map(c -> modelMapper.map(c, CardDto.class))
+                .collect(Collectors.toList());
+    }
+
+
+
+    private Card getCardById(String cardId) {
         return cardRepository.findById(cardId).orElseThrow(CardNotFoundException::new);
     }
 

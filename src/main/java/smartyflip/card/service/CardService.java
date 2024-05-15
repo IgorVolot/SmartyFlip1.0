@@ -13,17 +13,26 @@ import smartyflip.card.dto.CardDto;
 import smartyflip.card.dto.NewCardDto;
 import smartyflip.utils.PagedDataResponseDto;
 
+import java.util.Set;
+
 public interface CardService {
 
     CardDto addCard(NewCardDto newCardDto);
 
-    CardDto findCardById(Long cardId);
+    CardDto findCardById(String cardId);
 
-    CardDto editCard(Long cardId, NewCardDto newCardDto);
+    CardDto editCard(String cardId, NewCardDto newCardDto);
 
-    CardDto deleteCard(Long cardId);
+    boolean deleteCard(String cardId);
 
     Iterable<CardDto> findCardsByModuleId(Long moduleId);
 
     PagedDataResponseDto<CardDto> findAllCards(PageRequest pageRequest);
+
+    Iterable<CardDto> findCardByTags(Set<String> tag);
+
+
+    void addLike(String id);
+
+    void addDislike(String id);
 }

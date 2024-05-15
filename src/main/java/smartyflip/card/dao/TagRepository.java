@@ -6,13 +6,14 @@
  *
  */
 
-package smartyflip.modules.dao;
+package smartyflip.card.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import smartyflip.modules.model.Tag;
+import smartyflip.card.model.Tag;
+
 @Repository
-public interface TagRepository extends JpaRepository<Tag, Long> {
+public interface TagRepository extends MongoRepository<Tag, String> {
 
     Tag findByTagName(String tagName);
 

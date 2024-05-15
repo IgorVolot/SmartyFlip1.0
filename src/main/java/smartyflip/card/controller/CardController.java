@@ -10,6 +10,7 @@ package smartyflip.card.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import smartyflip.accounting.dto.UserResponseDto;
 import smartyflip.card.dto.CardDto;
@@ -30,19 +31,31 @@ public class CardController {
         return cardService.addCard(newCardDto);
     }
 
-    @GetMapping("/{cardId}")
-    public CardDto findCardById(@PathVariable Long cardId) {
-        return cardService.findCardById(cardId);
+    @GetMapping("/{id}")
+    public CardDto findCardById(@PathVariable String id) {
+        return cardService.findCardById(id);
     }
 
-    @PutMapping("/{cardId}")
-    public CardDto editCard(@PathVariable Long cardId, @RequestBody NewCardDto newCardDto) {
-        return cardService.editCard(cardId, newCardDto);
+    @PutMapping("/{id}")
+    public CardDto editCard(@PathVariable String id, @RequestBody NewCardDto newCardDto) {
+        return cardService.editCard(id, newCardDto);
     }
 
-    @DeleteMapping("/{cardId}")
-    public CardDto deleteCard(@PathVariable Long cardId) {
-        return cardService.deleteCard(cardId);
+    @DeleteMapping("/{id}")
+    public boolean deleteCard(@PathVariable String id) {
+        return cardService.deleteCard(id);
+    }
+
+    @PutMapping("/{id}/like")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void addLike(@PathVariable String id) {
+        cardService.addLike(id);
+    }
+
+    @PutMapping("/{id}/dislike")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void addDislike(@PathVariable String id) {
+        cardService.addDislike(id);
     }
 
     @GetMapping("/modules/{moduleId}")

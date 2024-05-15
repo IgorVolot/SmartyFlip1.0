@@ -11,31 +11,36 @@ package smartyflip.card.dto;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class CardDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long cardId;
+    private String id;
 
-    String question;
+    private String question;
 
-    String answer;
+    private String answer;
 
-    String level;
+    private String level;
 
-    Long moduleId;
+    private Long moduleId;
 
-    String moduleName;
+    private String moduleName;
 
-    LocalDateTime dateCreated;
+    private LocalDateTime dateCreated;
+
+    @Singular
+    private Set<String> tags;
+
+    private Integer likes;
+
+    private Integer dislike;
 }

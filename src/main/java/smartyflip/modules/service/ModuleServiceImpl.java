@@ -19,18 +19,16 @@ import smartyflip.accounting.dao.UserRepository;
 import smartyflip.accounting.dto.exceptions.UserNotFoundException;
 import smartyflip.accounting.model.UserAccount;
 import smartyflip.card.dao.CardRepository;
-import smartyflip.card.model.Card;
 import smartyflip.card.service.exceptions.InvalidSubscriptionTypeException;
 import smartyflip.card.service.exceptions.PayloadRequiredException;
 import smartyflip.modules.dao.ModuleRepository;
-import smartyflip.modules.dao.TagRepository;
+import smartyflip.card.dao.TagRepository;
 import smartyflip.modules.dto.DatePeriodDto;
 import smartyflip.modules.dto.ModuleDto;
 import smartyflip.modules.dto.NewModuleDto;
 import smartyflip.modules.model.Module;
 import smartyflip.modules.model.Tag;
 import smartyflip.modules.service.exceptions.ModuleNotFoundException;
-import smartyflip.modules.service.exceptions.UnauthorisedUserException;
 import smartyflip.modules.service.util.RegisteredModule;
 import smartyflip.modules.service.util.TrialModule;
 import smartyflip.stacks.dao.StackRepository;
@@ -38,8 +36,6 @@ import smartyflip.stacks.model.Stack;
 import smartyflip.utils.PagedDataResponseDto;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -9,9 +9,15 @@
 package smartyflip.card.dto;
 
 import lombok.Getter;
+import smartyflip.card.model.Tag;
+
+
+import java.util.Set;
 
 @Getter
 public class NewCardDto {
+
+    Long moduleId;
 
     String question;
 
@@ -19,5 +25,5 @@ public class NewCardDto {
 
     String level;
 
-    Long moduleId;
+    Set<Tag> tags;
 }
