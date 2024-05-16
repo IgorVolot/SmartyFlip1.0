@@ -11,7 +11,6 @@ package smartyflip.card.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
-import smartyflip.accounting.dto.UserResponseDto;
 import smartyflip.card.dto.CardDto;
 import smartyflip.card.dto.NewCardDto;
 import smartyflip.card.service.CardService;

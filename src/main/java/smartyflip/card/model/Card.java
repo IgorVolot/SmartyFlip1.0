@@ -10,11 +10,11 @@ package smartyflip.card.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import smartyflip.card.model.enums.Level;
 import smartyflip.modules.model.Module;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 
 @AllArgsConstructor
@@ -41,6 +41,7 @@ public class Card {
     @Column(name = "level", nullable = false)
     private Level level;
 
+    @CreatedDate
     @Column(name = "created", nullable = false, updatable = false)
     private LocalDateTime dateCreated = LocalDateTime.now();
 
@@ -53,13 +54,4 @@ public class Card {
     @ManyToOne
     @JoinColumn(name = "module_module_id")
     Module module;
-
-//    public long modulesAmount() {
-//        if(module != null) {
-//            return module.getCardsAmount();
-//        } else {
-//            // Default value
-//            return 0;
-//        }
-//    }
 }

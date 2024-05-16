@@ -10,7 +10,6 @@ package smartyflip.modules.service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ import smartyflip.modules.dao.ModuleRepository;
 import smartyflip.modules.dao.TagRepository;
 import smartyflip.modules.model.Module;
 import smartyflip.modules.model.Tag;
-import smartyflip.modules.service.exceptions.ModuleNotFoundException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,14 +60,14 @@ public class TagServiceImpl implements TagService {
         module.setTags(moduleTags);
         moduleRepository.save(module);
 
-        return moduleTags.stream().map(Tag::getTagName).collect(Collectors.toList());
+        return moduleTags.stream().map(Tag::getTag).collect(Collectors.toList());
     }
 
     @Transactional
-    public Tag insertIfNotExist(String tagName) {
-        Tag existingTag = tagRepository.findByTagName(tagName);
+    public Tag insertIfNotExist(String tag) {
+        Tag existingTag = tagRepository.findByTag(tag);
         if ( existingTag == null ) {
-            Tag newTag = new Tag(tagName);
+            Tag newTag = new Tag(tag);
             tagRepository.save(newTag);
             return newTag;
         } else {
@@ -83,7 +81,7 @@ public class TagServiceImpl implements TagService {
         if ( optionalModule.isPresent() ) {
             Module module = optionalModule.get();
             Set<Tag> tags = module.getTags();
-            tags.removeIf(t -> t.getTagName().equals(tag));
+            tags.removeIf(t -> t.getTag().equals(tag));
             module.setTags(tags);
             moduleRepository.save(module);
             return true;
@@ -97,14 +95,14 @@ public class TagServiceImpl implements TagService {
         Optional<Module> optionalModule = moduleRepository.findById(moduleId);
         if ( optionalModule.isPresent() ) {
             Module module = optionalModule.get();
-            module.getTags().forEach(tag -> tagList.add(tag.getTagName()));
+            module.getTags().forEach(tag -> tagList.add(tag.getTag()));
         }
         return tagList;
     }
 
     @Override
     public Iterable<String> findAllTags() {
-        return tagRepository.findAll().stream().map(Tag::getTagName).collect(Collectors.toList());
+        return tagRepository.findAll().stream().map(Tag::getTag).collect(Collectors.toList());
     }
 
     @Transactional
@@ -115,10 +113,10 @@ public class TagServiceImpl implements TagService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Tag not found");
         }
         Tag tag = optionalTag.get();
-        List<Module> modules = moduleRepository.findAllByTags(Collections.singleton(tag.getTagName())).toList();
+        List<Module> modules = moduleRepository.findAllByTags(Collections.singleton(tag.getTag())).toList();
         for ( Module module : modules ) {
             Set<Tag> tags = module.getTags();
-            tags.removeIf(t -> t.getTagName().equals(tag.getTagName()));
+            tags.removeIf(t -> t.getTag().equals(tag.getTag()));
             module.setTags(tags);
             moduleRepository.save(module);
         }

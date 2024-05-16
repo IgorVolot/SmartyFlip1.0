@@ -9,15 +9,13 @@ package smartyflip.modules.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CurrentTimestamp;
 import org.hibernate.annotations.Formula;
+import org.springframework.data.annotation.CreatedDate;
 import smartyflip.accounting.model.UserAccount;
 import smartyflip.card.model.Card;
 import smartyflip.stacks.model.Stack;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -43,6 +41,7 @@ public class Module {
     @Column(name = "userName", nullable = false)
     private String userName;
 
+    @CreatedDate
     @Column(name = "created", nullable = false, updatable = false)
     private LocalDateTime dateCreated = LocalDateTime.now();
 
@@ -53,7 +52,7 @@ public class Module {
     private int cardsAmount;
 
     @ManyToOne
-    @JoinColumn(name = "users_username")
+    @JoinColumn(name = "users_username", nullable = false)
     private UserAccount userAccount;
 
     @ManyToOne
@@ -69,15 +68,9 @@ public class Module {
     )
     private Set<Tag> tags = new HashSet<>();
 
-//    @ManyToMany(mappedBy = "modules")
-//    private Set<Tag> tags = new HashSet<>();
-
-
 
     @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Card> cards = new HashSet<>();
-
-
 
     public void addTag(Tag tag) {
         if (tags == null) {
@@ -101,5 +94,4 @@ public class Module {
             tag.getModules().remove(this); // Clean up the reverse link
         }
     }
-
 }

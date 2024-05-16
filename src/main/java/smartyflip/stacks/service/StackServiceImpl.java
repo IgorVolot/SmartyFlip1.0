@@ -8,8 +8,6 @@
 
 package smartyflip.stacks.service;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -65,11 +63,11 @@ public class StackServiceImpl implements StackService {
 
     @Transactional
     @Override
-    public boolean removeStack(Long stackId) {
+    public StackDto deleteStack(Long stackId) {
         Stack stack = stackRepository.findById(stackId)
                 .orElseThrow(StackNotFoundException::new);
         stackRepository.delete(stack);
-        return true;
+        return modelMapper.map(stack, StackDto.class);
     }
 
 

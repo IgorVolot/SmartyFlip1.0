@@ -51,7 +51,6 @@ public class UserAccount implements UserDetails {
     @OneToMany(mappedBy = "userAccount")
     private List<Module> modules = new ArrayList<>();
 
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",

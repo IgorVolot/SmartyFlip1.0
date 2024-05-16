@@ -9,6 +9,7 @@
 package smartyflip.modules.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import lombok.Setter;
 import java.util.HashSet;
 import java.util.Set;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -29,7 +31,7 @@ public class Tag {
     private Long tagId;
 
     @Column(nullable = false, unique = true)
-    private String tagName;
+    private String tag;
 
     @ManyToMany(mappedBy = "tags")
     private Set<Module> modules = new HashSet<>();
@@ -43,13 +45,7 @@ public class Tag {
 //    private Set<Module> modules = new HashSet<>();
 
 
-    public Tag(Long tagId, String tagName, Set<Module> modules) {
-        this.tagId = tagId;
-        this.tagName = tagName;
-        this.modules = modules;
-    }
-
     public Tag(String tag) {
-        this.tagName = tag;
+        this.tag = tag;
     }
 }

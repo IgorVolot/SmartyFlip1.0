@@ -19,28 +19,23 @@ import smartyflip.accounting.dao.UserRepository;
 import smartyflip.accounting.dto.exceptions.UserNotFoundException;
 import smartyflip.accounting.model.UserAccount;
 import smartyflip.card.dao.CardRepository;
-import smartyflip.card.model.Card;
 import smartyflip.card.service.exceptions.InvalidSubscriptionTypeException;
-import smartyflip.card.service.exceptions.PayloadRequiredException;
 import smartyflip.modules.dao.ModuleRepository;
 import smartyflip.modules.dao.TagRepository;
 import smartyflip.modules.dto.DatePeriodDto;
 import smartyflip.modules.dto.ModuleDto;
 import smartyflip.modules.dto.NewModuleDto;
 import smartyflip.modules.model.Module;
-import smartyflip.modules.model.Tag;
 import smartyflip.modules.service.exceptions.ModuleNotFoundException;
-import smartyflip.modules.service.exceptions.UnauthorisedUserException;
+import smartyflip.modules.service.exceptions.UnauthorizedAccessException;
 import smartyflip.modules.service.util.RegisteredModule;
 import smartyflip.modules.service.util.TrialModule;
 import smartyflip.stacks.dao.StackRepository;
 import smartyflip.stacks.model.Stack;
+import smartyflip.stacks.service.exceptions.StackNotFoundException;
 import smartyflip.utils.PagedDataResponseDto;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,47 +57,32 @@ public class ModuleServiceImpl implements ModuleService {
 
     private final UserRepository userRepository;
 
-    // TO REVISE
-
-//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-//    public Module getModule(Long moduleId, String token) {
-//        if (!checkAccess(token)) {
-//            throw new SecurityException("Access Denied: Invalid or expired token.");
-//        }
-//
-//        Module module = moduleRepository.findById(moduleId).orElseThrow(() -> new IllegalArgumentException("Module not found"));
-//
-//        if (module instanceof TrialModule) {
-//            TrialModule trialModule = (TrialModule) module;
-//            if ( LocalDate.now().isAfter(trialModule.getTrialEndDate())) {
-//                throw new RuntimeException("Trial period has expired.");
-//            }
-//        }
-//
-//        return module;
-//    }
-//
-//    private boolean checkAccess(String token) {
-//        // Assume tokenService.decodeToken returns an object that includes user role
-//        DecodedTokenInfo tokenInfo = tokenService.decodeToken(token);
-//        return tokenInfo.isValid() && (tokenInfo.getRole().equals("REGISTERED") || (tokenInfo.getRole().equals("GUEST") && module instanceof TrialModule));
-//    }
-
 
     private Module findModuleOrThrow(Long moduleId) {
         return moduleRepository.findById(moduleId).orElseThrow(ModuleNotFoundException::new);
     }
 
-
     @Transactional
     @Override
     public ModuleDto addModule(NewModuleDto newModuleDto, String subscriptionType) {
-        Optional<UserAccount> userAccount = userRepository.findByUsername(newModuleDto.getUserName());
+        // Retrieve UserAccount
+        Optional<UserAccount> userAccountOpt = userRepository.findByUsername(newModuleDto.getUsername());
+        if ( userAccountOpt.isEmpty() ) {
+            throw new UserNotFoundException();
+        }
+        UserAccount userAccount = userAccountOpt.get();
 
+        // Check if the user is an administrator
+        boolean isAdmin = userAccount.getRoles().stream()
+                .anyMatch(role -> role.getName().equals("ADMINISTRATOR"));
+
+        // Check access permissions based on subscription type
+        if ( "GUEST".equalsIgnoreCase(subscriptionType) && !isAdmin ) {
+            throw new InvalidSubscriptionTypeException("Creating a GUEST module is restricted to ADMIN users only.");
+        }
+
+        // Determine the type of module based on subscription type and map fields
         Module module;
-
-        // Create a new Module
-
         if ( "GUEST".equalsIgnoreCase(subscriptionType) ) {
             module = modelMapper.map(newModuleDto, TrialModule.class);
             ((TrialModule) module).setSubscriptionType("GUEST");
@@ -110,130 +90,99 @@ public class ModuleServiceImpl implements ModuleService {
             module = modelMapper.map(newModuleDto, RegisteredModule.class);
             ((RegisteredModule) module).setSubscriptionType("USER");
         } else {
-            throw new IllegalArgumentException("Invalid subscription type.");
+            throw new InvalidSubscriptionTypeException("Invalid subscription type.");
         }
 
-        // Set up a userName
-//        module.setUserName(newModuleDto.getUserName().trim().toLowerCase().replaceAll("\\s+", "_"));
-        module.setUserName(userAccount.map(UserAccount::getUsername).orElseThrow(UserNotFoundException::new));
+        // Set common fields
+        module.setUserAccount(userAccount);
+        module.setUserName(userAccount.getUsername()); // This ensures user_name is set
 
 
         // Check if the Stack already exists
         Stack stack = stackRepository.findByStackNameIgnoreCase(newModuleDto.getStackName());
-        if ( stack == null ) {
-            // If the Stack doesn't exist, create and save a new Stack
-            stack = new Stack();
-            stack.setStackName(newModuleDto.getStackName().trim().toUpperCase().replaceAll("\\s+", "_"));
-            stack = stackRepository.save(stack);
+        if (stack == null) {
+            throw new StackNotFoundException();
         }
 
-        // Update Module's Stack
+        // Set the stack and save
         module.setStack(stack);
-
-        // Adding tags Collection to Module
-//        Collection<String> tagNames = newModuleDto.getTagNames();
-//        List<Tag> tagsToAdd = tagNames.stream()
-//                .map(this::insertIfNotExist)
-//                .toList();
-//
-//        module.getTags().addAll(tagsToAdd); // Add all the fetched tags to the module
-//        moduleRepository.save(module);
-
-        // Create a date of module creation
-        module.setDateCreated(LocalDateTime.now());
-        // Save Module in repository
         module = moduleRepository.save(module);
         return modelMapper.map(module, ModuleDto.class);
     }
 
     @Transactional
-    public Tag insertIfNotExist(String tagName) {
-        Tag existingTag = tagRepository.findByTagName(tagName);
-        if ( existingTag == null ) {
-            Tag newTag = new Tag(tagName);
-            tagRepository.save(newTag);
-            return newTag;
-        } else {
-            return existingTag;
+    public ModuleDto editModule(NewModuleDto newModuleDto, Long moduleId) {
+        // Retrieve the existing Module
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(ModuleNotFoundException::new);
+
+        // Retrieve UserAccount using username from DTO
+        Optional<UserAccount> userAccountOpt = userRepository.findByUsername(newModuleDto.getUsername());
+        if (userAccountOpt.isEmpty()) {
+            throw new UserNotFoundException();
         }
+        UserAccount userAccount = userAccountOpt.get();
+
+        // Check if the user is an administrator
+        boolean isAdmin = userAccount.getRoles().stream()
+                .anyMatch(role -> role.getName().equals("ADMINISTRATOR"));
+
+        // Check permissions for registered users
+        if (!isAdmin && !module.getUserAccount().getUsername().equals(newModuleDto.getUsername())) {
+            throw new UnauthorizedAccessException("User is not authorized to edit this module.");
+        }
+
+        // Validate and set stackName if provided
+        if (newModuleDto.getStackName() != null) {
+            Stack stack = stackRepository.findByStackNameIgnoreCase(newModuleDto.getStackName());
+            if (stack == null) {
+                throw new StackNotFoundException();
+            }
+            module.setStack(stack);
+        }
+
+        // Set moduleName if provided
+        if (newModuleDto.getModuleName() != null) {
+            module.setModuleName(newModuleDto.getModuleName());
+        }
+
+        // Save changes
+        module = moduleRepository.save(module);
+        return modelMapper.map(module, ModuleDto.class);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public Iterable<ModuleDto> findModulesByUserId(Integer userId) {
+        UserAccount userAccount = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return moduleRepository
+                .findModulesByUserAccount(userAccount)
+                .map(module -> modelMapper.map(module, ModuleDto.class))
+                .collect(Collectors.toList());
+    }
+
+
+    @Transactional(readOnly = true)
     @Override
     public ModuleDto findModuleById(Long moduleId) {
         Module module = findModuleOrThrow(moduleId);
         return modelMapper.map(module, ModuleDto.class);
     }
-
     @Transactional
     @Override
-    public ModuleDto editModule(NewModuleDto newModuleDto, Long moduleId, String subscriptionType) {
-        Module module = findModuleOrThrow(moduleId);
-
-        module.setModuleName(newModuleDto.getModuleName().trim().toLowerCase().replaceAll("\\s+", "_"));
-        module.setUserName(newModuleDto.getUserName().trim().toLowerCase().replaceAll("\\s+", "_"));
-        changeStackName(newModuleDto, module);
-        if ( module.getModuleName().isEmpty() || module.getUserName().isEmpty() || module.getStackName().isEmpty()) {
-            throw new PayloadRequiredException();
-        }
-        if ( module instanceof TrialModule && "USER".equalsIgnoreCase(subscriptionType) ) {
-            module = modelMapper.map(newModuleDto, RegisteredModule.class);
-            ((RegisteredModule) module).setSubscriptionType("USER");
-        } else if ( module instanceof RegisteredModule && "GUEST".equalsIgnoreCase(subscriptionType) ) {
-            module = modelMapper.map(newModuleDto, TrialModule.class);
-            ((TrialModule) module).setSubscriptionType("GUEST");
-        } else {
-            throw new InvalidSubscriptionTypeException("Invalid subscription type.");
-        }
-        module = moduleRepository.save(module);
-        return modelMapper.map(module, ModuleDto.class);
-    }
-
-    public void changeStackName(NewModuleDto newModuleDto, Module module) {
-        Stack newStack = stackRepository.findByStackNameIgnoreCase(newModuleDto.getStackName());
-        if ( newStack == null ) {
-            newStack = new Stack();
-            newStack.setStackName(newModuleDto.getStackName().trim().toLowerCase().replaceAll("\\s+", "_"));
-        }
-        module.setStack(newStack);
-
-        // Set the stackName of Module.
-        module.setStackName(newStack.getStackName());
-    }
-
-    @Transactional
-    @Override
-    public boolean deleteModule(Long moduleId) {
+    public ModuleDto deleteModule(Long moduleId) {
         Module module = findModuleOrThrow(moduleId);
         cardRepository.findCardsByModuleId(moduleId).forEach(cardRepository::delete);
         moduleRepository.deleteById(moduleId);
-        return !moduleRepository.existsById(moduleId);
+        return modelMapper.map(module, ModuleDto.class);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public Iterable<ModuleDto> findModulesByUserName(String userName) {
-
-        if ( userName == null || userName.isEmpty() ) {
-            throw new UserNotFoundException();
-        }
-
-        List<ModuleDto> modules = moduleRepository
-                .findModulesByUserNameIgnoreCase(userName)
-                .map(module -> modelMapper.map(module, ModuleDto.class))
-                .collect(Collectors.toList());
-
-        if ( modules.isEmpty() ) {
-            throw new UserNotFoundException();
-        }
-
-        return modules;
-    }
 
     @Transactional(readOnly = true)
     @Override
     public Iterable<ModuleDto> findModulesByPeriod(DatePeriodDto datePeriodDto) {
         return moduleRepository
-                .findAllByDateCreatedBetween(datePeriodDto.getDateFrom(), datePeriodDto.getDateTo())
+                .findAllByDateCreatedBetween(datePeriodDto.getDateFrom().atStartOfDay(), datePeriodDto.getDateTo().atStartOfDay())
                 .map(module -> modelMapper.map(module, ModuleDto.class))
                 .collect(Collectors.toList());
     }
@@ -260,7 +209,6 @@ public class ModuleServiceImpl implements ModuleService {
         return pagedDataResponseDto;
     }
 
-
     @Transactional(readOnly = true)
     @Override
     public Iterable<ModuleDto> findModulesByStack(String stackName) {
@@ -269,17 +217,6 @@ public class ModuleServiceImpl implements ModuleService {
                 .map(module -> modelMapper.map(module, ModuleDto.class))
                 .collect(Collectors.toList());
     }
-
-    // FIXME
-//    @Transactional(readOnly = true)
-//    @Override
-//    public Iterable<ModuleDto> finAllModulesByTags(Iterable<String> tags) {
-//        return moduleRepository
-//                .findAllByTags(new HashSet<>())
-//                .map(module -> modelMapper.map(module, ModuleDto.class))
-//                .collect(Collectors.toList());
-//    }
-
 
     @Transactional(readOnly = true)
     @Override

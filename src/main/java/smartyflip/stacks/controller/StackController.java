@@ -36,8 +36,8 @@ public class StackController {
     }
 
     @DeleteMapping("/{stackId}")
-    public boolean removeStack(@PathVariable Long stackId) {
-        return stackService.removeStack(stackId);
+    public StackDto deleteStack(@PathVariable Long stackId) {
+        return stackService.deleteStack(stackId);
     }
 
     @GetMapping("")

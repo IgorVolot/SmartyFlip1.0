@@ -14,7 +14,7 @@ public interface StackService {
 
     StackDto addStack(StackDto stackDto);
 
-    boolean removeStack(Long stackId);
+    StackDto deleteStack(Long stackId);
 
     StackDto findStackById(Long stackId);
 

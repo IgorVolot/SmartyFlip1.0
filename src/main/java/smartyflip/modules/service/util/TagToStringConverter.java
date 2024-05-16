@@ -14,7 +14,7 @@ import smartyflip.modules.model.Tag;
 public class TagToStringConverter extends AbstractConverter<Tag, String> {
     @Override
     protected String convert(Tag source) {
-        return source.getTagName().trim().toLowerCase().replaceAll("\\s+", "_");
+        return source.getTag().trim().toLowerCase().replaceAll("\\s+", "_");
     }
 
     public String convertToDatabaseColumn(String tag) {

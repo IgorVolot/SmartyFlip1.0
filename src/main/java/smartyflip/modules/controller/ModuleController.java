@@ -40,20 +40,21 @@ public class ModuleController {
         return moduleService.findModuleById(moduleId);
     }
 
-    // FIXME
-    @PutMapping("/{moduleId}/user/{userType}")
-    public ModuleDto editModule(@RequestBody NewModuleDto newModuleDto, @PathVariable Long moduleId, @PathVariable String userType) {
-        return moduleService.editModule(newModuleDto, moduleId, userType);
+    @PutMapping("/{moduleId}")
+    public ModuleDto editModule(@RequestBody NewModuleDto newModuleDto, @PathVariable Long moduleId) {
+        return moduleService.editModule(newModuleDto, moduleId);
     }
 
+
     @DeleteMapping("/{moduleId}")
-    public boolean deleteModule(@PathVariable Long moduleId) {
+    public ModuleDto deleteModule(@PathVariable Long moduleId) {
         return moduleService.deleteModule(moduleId);
     }
 
-    @GetMapping("/user/{userName}")
-    public Iterable<ModuleDto> findModulesByUserName(@PathVariable String userName) {
-        return moduleService.findModulesByUserName(userName);
+
+    @GetMapping("/user/{userId}")
+    public Iterable<ModuleDto> findModulesByUserId(@PathVariable Integer userId){
+        return moduleService.findModulesByUserId(userId);
     }
 
     @PostMapping("/period")
@@ -66,7 +67,7 @@ public class ModuleController {
         return moduleService.findModulesByName(moduleName);
     }
 
-    // FIXME
+
 //    @GetMapping("/tags")
 //    public Iterable<ModuleDto> findAllModulesByTags(@RequestBody Iterable<String> tagNames) {
 //        return moduleService.finAllModulesByTags(tagNames);

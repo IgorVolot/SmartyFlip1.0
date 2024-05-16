@@ -19,22 +19,20 @@ public interface ModuleService {
 
     ModuleDto findModuleById(Long moduleId);
 
-    // FIXME
-    ModuleDto editModule(NewModuleDto newModuleDto, Long moduleId, String subscriptionType);
+    ModuleDto editModule(NewModuleDto newModuleDto, Long moduleId);
 
-    boolean deleteModule(Long moduleId);
-
-    Iterable<ModuleDto> findModulesByUserName(String userName);
+    ModuleDto deleteModule(Long moduleId);
 
     Iterable<ModuleDto> findModulesByPeriod(DatePeriodDto datePeriodDto);
 
     Iterable<ModuleDto> findModulesByName(String moduleName);
 
+    Iterable<ModuleDto> findModulesByUserId(Integer userId);
+
     PagedDataResponseDto<ModuleDto> findAllModules(PageRequest pageRequest);
 
     Iterable<ModuleDto> findModulesByStack(String stackName);
 
-    // FIXME
 //    Iterable<ModuleDto> finAllModulesByTags(Iterable<String> tags);
 
     int cardsAmountByModuleId(Long moduleId);

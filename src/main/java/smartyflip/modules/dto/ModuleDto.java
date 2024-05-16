@@ -8,13 +8,17 @@
 
 package smartyflip.modules.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import smartyflip.card.dto.CardDto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,20 +31,16 @@ public class ModuleDto {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long moduleId;
 
+
     String moduleName;
 
+    @JsonProperty("username")
     String userName;
 
-    LocalDate dateCreated;
+    LocalDateTime dateCreated;
 
     String stackName;
 
     @Builder.Default
-    Set<String> tags = new HashSet<>();
-
-    @Builder.Default
     Set<CardDto> cards = new HashSet<>();
-
-//    int cardsAmount;
-
 }

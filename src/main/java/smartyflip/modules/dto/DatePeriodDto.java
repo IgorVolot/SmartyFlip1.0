@@ -8,18 +8,14 @@
 
 package smartyflip.modules.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class DatePeriodDto {
+
     LocalDate dateFrom;
+
     LocalDate dateTo;
 }

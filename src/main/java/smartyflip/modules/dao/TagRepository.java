@@ -14,6 +14,6 @@ import smartyflip.modules.model.Tag;
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Long> {
 
-    Tag findByTagName(String tagName);
+    Tag findByTag(String tag);
 
 }

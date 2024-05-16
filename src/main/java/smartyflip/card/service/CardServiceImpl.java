@@ -27,8 +27,6 @@ import smartyflip.modules.model.Module;
 import smartyflip.modules.service.exceptions.ModuleNotFoundException;
 import smartyflip.utils.PagedDataResponseDto;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,11 +54,9 @@ public class CardServiceImpl implements CardService {
         // A new Card creation
         Card card = modelMapper.map(newCardDto, Card.class);
         card.setLevel(Level.fromString(newCardDto.getLevel()));
-        card.setDateCreated(LocalDateTime.now());
+//        card.setDateCreated(LocalDateTime.now());
         card.setModuleName(module.getModuleName().trim().toLowerCase().replaceAll("\\s+", "_"));
         card.setModule(module);
-        int cardCount = module.getCardsAmount() + 1;
-        module.setCardsAmount(cardCount);
         moduleRepository.save(module);
         cardRepository.save(card);
         return mapToDto(card);
@@ -74,6 +70,7 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public CardDto editCard(Long cardId, NewCardDto newCardDto) {
+        Module module = moduleRepository.findById(newCardDto.getModuleId()).orElseThrow(ModuleNotFoundException::new);
         Card card = getCardById(cardId);
         updateCard(newCardDto, card);
         cardRepository.save(card);
